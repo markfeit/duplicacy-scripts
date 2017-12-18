@@ -6,12 +6,12 @@
 
 # Backups every four hours
 #Min Hour DoM Mon DoW  Command
-#25   */4  *   *   *    __BIN__/cron-backup
-25   *  *   *   *    __BIN__/cron-backup
+45   0    *   *   *    __BIN__/cron-backup
+#25   *    *   *   *    __BIN__/cron-backup
 
 
 # Routine Maintenance
 #Min Hour DoM Mon DoW  Command
-0    1    *   *   *    __BIN__/cron-daily
-0    2    *   *   Sun  __BIN__/cron-weekly
-0    3    1-7 *   Sun  __BIN__/cron-monthly
+0    3    *   *   *    __BIN__/cron-daily
+15   3    *   *   Sun  __BIN__/cron-weekly
+30   3    1-7 *   Sun  __BIN__/cron-monthly
