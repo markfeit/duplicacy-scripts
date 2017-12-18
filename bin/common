@@ -38,7 +38,7 @@ die()
 # Run a duplicacy command from the right place
 duplicacy_cmd()
 {
-    [ -d "${TOP}/root" ] \
+    [ -h "${TOP}/root" ] \
 	|| die "Can't find backup root"
 
     (cd "${TOP}/root" && duplicacy "$@")
