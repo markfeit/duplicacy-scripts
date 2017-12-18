@@ -58,7 +58,7 @@ $(BIN)/duplicacy: $(BIN)/$(DUPLICACY_BINARY) $(BIN)
 # Crontab
 CRONTAB=$(LIB)/crontab
 $(CRONTAB): lib/crontab $(LIB) 
-	sed -e 's|__TOP__|$(DEST)|g' $< > $@
+	sed -e 's|__BIN__|$(BIN)|g' $< > $@
 
 install: $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	$(PREFS) $(LOCATION_FILE)
