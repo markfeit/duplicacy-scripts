@@ -5,7 +5,11 @@
 # Configure the following to taste.
 
 # Suitable for general use:
+
+# Root of backup
 ROOT=/
+
+# Where the scripts and data should be installed
 DEST=/local/duplicacy
 
 # Suitable for experimentation in /tmp
@@ -37,7 +41,7 @@ $(DEST)/%:
 # File that points Duplicacy at its local storage
 LOCATION_FILE=$(ROOT)/.duplicacy
 $(LOCATION_FILE): $(ROOT)
-	echo "$(DEST)" > $@
+	echo "$(DEST)/prefs" > $@
 
 
 # Duplicacy binary.
