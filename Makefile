@@ -10,7 +10,7 @@
 ROOT=/
 
 # Where the scripts and data should be installed
-DEST=/local/duplicacy
+DEST=/system/duplicacy
 
 # Suitable for experimentation in /tmp
 #ROOT=/tmp
