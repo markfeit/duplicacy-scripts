@@ -10,7 +10,11 @@ should work in any environment that complies with POSIX.
 
 ## Installation
 
-Download the Duplicacy binary from [Gilbert Chen's release page](https://github.com/gilbertchen/duplicacy/releases).  Note that the license for Duplicacy imposes some restrictions on its use.  Please abide by them.
+Clone this repository:  `git clone https://github.com/markfeit/duplicacy-scripts.git`
+
+`cd duplicacy-scripts`
+
+Download the Duplicacy binary from [Gilbert Chen's release page](https://github.com/gilbertchen/duplicacy/releases) and place the file in `duplicacy-scripts`.  Note that the license for Duplicacy imposes some restrictions on its use.  Please abide by them.
 
 Edit the `Makefile` and adjust the configuration at the top as you want it.
 
