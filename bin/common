@@ -13,9 +13,9 @@ NAME=duplicacy-scripts
 WHEREAMI=$(dirname $0)
 WHOAMI=$(basename $0)
 
-PREFS=$(cd "${WHEREAMI}/.." && pwd)
-TOP=$(cd "${PREFS}/.." && pwd)
-ROOT=$(cd "${TOP}/root" && pwd)
+PREFS=$(cd "${WHEREAMI}/.." && pwd -P)
+TOP=$(cd "${PREFS}/.." && pwd -P)
+ROOT=$(cd "${TOP}/root" && pwd -P)
 BIN="${PREFS}/bin"
 ETC="${PREFS}/etc"
 LIB="${PREFS}/lib"
