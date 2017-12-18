@@ -1,0 +1,24 @@
+#
+# Prune Policy for Duplicacy
+#
+
+# This file will be sorted into the proper order so pruning of older
+# snapshots happens first.
+
+
+# General-use policy that keeps overall storage use down.
+
+                # Prior to seven days, keep all snapshots.
+1	7	# One per day for snapshots older than 7 days
+7	30	# One per week for snapshots older than a month
+30	180	# One per 30 days for snapshots older than 180 days
+0	360	# None older than 360 days
+
+
+
+# This policy is better for services like Wasabi that charge for 90
+# days of storage even if an object has a shorter life than that.
+
+#               # Prior to 89 days, keep all snapshots.
+# 30	89	# One per 30 days for snapshots older than the limit
+# 0	360	# None older than 360 days

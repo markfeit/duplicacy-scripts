@@ -1,0 +1,20 @@
+#
+# Crontab addition for Duplicacy Scripts
+#
+
+DUP_TOP=__TOP__
+DUP_BIN=$DUP_TOP/bin
+
+# Minute, Hour, DoM, Month, DoW
+
+# Backups every four hours
+#Min Hour DoM Mon DoW  Command
+#25   */4  *   *   *    $DUP_BIN/cron-backup
+25   *  *   *   *    $DUP_BIN/cron-backup
+
+
+# Routine Maintenance
+#Min Hour DoM Mon DoW  Command
+0    1    *   *   *    $DUP_BIN/cron-daily
+0    2    *   *   Sun  $DUP_BIN/cron-weekly
+0    3    1-7 *   Sun  $DUP_BIN/cron-monthly

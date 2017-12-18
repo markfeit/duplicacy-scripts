@@ -1,0 +1,21 @@
+#!/bin/sh -e
+#
+# Script to run this backup
+#
+
+. $(dirname $0)/common
+
+<<EOF cat
+Backing up ${TOP}
+
+EOF
+
+avoid_running_backup
+
+cd "${TOP}"
+
+exec duplicacy \
+    backup \
+    -stats \
+    -limit-rate 20000 \
+    "$@"

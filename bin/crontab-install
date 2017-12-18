@@ -1,0 +1,17 @@
+#!/bin/sh -e
+#
+# Insert the crontab into the current user's crontab
+#
+
+. $(dirname $0)/common
+
+FILE="$1"
+shift
+[ -e "${FILE}" -a -r "${FILE}" -a -w "${FILE}" ] \
+    || die "${FILE}: Unreadable or unwritable."
+
+sed -i -e "/^#BEGIN-${NAME}/,/^#END-${NAME}/d" "${FILE}"
+
+echo "#BEGIN-${NAME}" >> "${FILE}"
+cat "${LIB}/crontab" >> "${FILE}"
+echo "#END-${NAME}" >> "${FILE}"

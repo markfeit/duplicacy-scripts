@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# Daily Maintenance
+#
+
+. $(dirname $0)/common
+
+# Remove old logs
+find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
+
+# Prune old snapshots
+log prune "${BIN}/prune"
+
+exit 0
+
+
+

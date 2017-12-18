@@ -1,0 +1,26 @@
+#
+# Filters for Duplicacy
+#
+# This is just a sample.  Edit and install for your own installation.
+#
+
+# Don't back up anything in directories named "nobackup" or anywhere
+# below them.
+-nobackup/*
+-*/nobackup/*
+
+# Keep the duplicacy configuration except the cache.
+-local/duplicacy/prefs/cache/
++local/duplicacy/*
+
+# Paths relative to the root to include
++local0/*
+
+# This works, but isn't pretty.
++local/export/home/*
++local/export/home/
++local/export/
++local/
+
+# Ignore anything else.
+-*

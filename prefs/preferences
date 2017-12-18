@@ -1,0 +1,16 @@
+[
+    {
+        "name": "default",
+	"id": "myhost",
+	"storage": "s3://...",
+	"encrypted": true,
+	"no_backup": false,
+	"no_restore": false,
+	"no_save_password": false,
+	"keys": {
+	    "password": "mumble-mumble-mumble",
+	    "s3_id": "281apple",
+	    "s3_secret": "OU812"
+	}
+    }
+]

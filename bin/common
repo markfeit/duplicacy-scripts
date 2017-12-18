@@ -1,0 +1,104 @@
+#
+# Common functions and variables
+#
+
+# Configure these to taste.
+
+# ...
+
+# No user-serviceable parts below this point.
+
+NAME=duplicacy-scripts
+
+WHEREAMI=$(dirname $0)
+WHOAMI=$(basename $0)
+
+PREFS=$(cd "${WHEREAMI}/.." && pwd)
+TOP=$(cd "${PREFS}/.." && pwd)
+
+BIN="${PREFS}/bin"
+ETC="${PREFS}/etc"
+LIB="${PREFS}/lib"
+VAR="${PREFS}/var"
+
+LOG="${VAR}/log"
+mkdir -p "${LOG}"
+
+PATH=${BIN}:${PATH}
+
+
+#
+# Run a program and log the output
+#
+# Args:
+#  1 - Log file name tag (e.g. "backup" or "prune")
+#  2+- Program name and arguments
+#
+log()
+{
+    TAG=$1
+    shift
+
+    TIMESTAMP=$(date +"%Y-%m-%dT%H:%M:%S")
+    OUT_LOG="${LOG}/$(date +"%Y-%m-%dT%H:%M:%S")-${TAG}"
+
+    echo "START ${TAG} at $(date)" > "${OUT_LOG}"
+    echo >> "${OUT_LOG}"
+
+    if [ -t 1 ]
+    then
+	"$@" 2>&1 | tee -a "${OUT_LOG}"
+    else
+	"$@" 2>&1 | cat >> "${OUT_LOG}"
+    fi
+
+    echo >> "${OUT_LOG}"
+    echo "END ${TAG} at $(date)" >> "${OUT_LOG}"
+}
+
+
+
+#
+# Utilities
+#
+
+# Exit nicely if a backup is already in progress
+avoid_running_backup()
+{
+    RUNNING_PID=$( \
+	ps -o pid,args \
+        | awk '$2 == "duplicacy" && $3 == "backup" { print $1 }' \
+        )
+
+    if [ -n "${RUNNING_PID}" ]
+    then
+        echo "Backup is already running, PID ${RUNNING_PID}" | log
+        exit 0
+    fi
+}
+
+
+
+# Exit with an error
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+
+
+
+
+
+#
+# Unused parts
+#
+
+list_backups()
+{
+    duplicacy list \
+	| egrep -e '^Snapshot ' \
+	| awk '{ printf "%sT%s %s Rev. %s\n", $7, $8, $2, $4 }' \
+	| sort -r
+}

@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Weekly Maintenance
+#
+
+. $(dirname $0)/common
+
+# Nothing to do here.
+
+exit 0

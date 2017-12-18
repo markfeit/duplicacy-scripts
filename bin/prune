@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# Prune snapshots according to a list
+#
+
+. $(dirname $0)/common
+
+avoid_running_backup
+
+PRUNES="${ETC}/prune"
+
+if [ ! -f "${PRUNES}" -o ! -r "${PRUNES}" ]
+then
+    echo "No prune configuration found."
+    exit 0
+fi
+
+PRUNESPEC=$( \
+    cat "${PRUNES}" \
+	| sed -e 's/\s*#.*$//g; /^\s*$/d' \
+	| awk '$0 ~ /^[0-9]+\s*[0-9]+$/ { print $1 ":" $2 }' \
+	| sort -r -n -t: -k 2 \
+	| sed -e 's/^/-keep /g' \
+	 )
+
+# TODO: Decide when to do an exhaustive pruning.  Maybe once every
+# two weeks.
+
+cd "${TOP}"
+
+duplicacy prune ${PRUNESPEC}
+
+exit 0

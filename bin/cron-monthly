@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Monthly Maintenance
+#
+
+. $(dirname $0)/common
+
+# Do an exhaustive prune 
+
+exit 0
