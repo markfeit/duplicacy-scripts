@@ -35,14 +35,17 @@ die()
 
 
 
-# Return the physical root directory of the backup
+# Run a duplicacy command from the right place
+duplicacy_cmd()
 backup_root()
 {
     [ -d "${TOP}/root" ] \
-    || die "Can't find backup root"
-    
-    (cd "${TOP}/root" && pwd -P)
+	|| die "Can't find backup root"
+
+    (cd "${TOP}/root" && duplicacy "$@")
 }
+
+
 
 
 #
@@ -109,7 +112,7 @@ avoid_running_backup()
 
 list_backups()
 {
-    duplicacy list \
+    duplicacy_cmd list \
 	| egrep -e '^Snapshot ' \
 	| awk '{ printf "%sT%s %s Rev. %s\n", $7, $8, $2, $4 }' \
 	| sort -r

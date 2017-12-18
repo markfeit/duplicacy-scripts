@@ -7,7 +7,6 @@
 
 avoid_running_backup
 
-BACKUP_ROOT=$(backup_root)
 PRUNES="${ETC}/prune"
 
 if [ ! -f "${PRUNES}" -o ! -r "${PRUNES}" ]
@@ -27,8 +26,6 @@ PRUNESPEC=$( \
 # TODO: Decide when to do an exhaustive pruning.  Maybe once every
 # two weeks.
 
-cd "${BACKUP_ROOT}"
-
-duplicacy prune ${PRUNESPEC}
+duplicacy_cmd prune ${PRUNESPEC}
 
 exit 0

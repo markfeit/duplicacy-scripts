@@ -5,18 +5,9 @@
 
 . $(dirname $0)/common
 
-BACKUP_ROOT=$(backup_root)
-
-<<EOF cat
-Backing up ${BACKUP_ROOT}
-
-EOF
-
 avoid_running_backup
 
-cd "${BACKUP_ROOT}"
-
-exec duplicacy \
+duplicacy_cmd \
     backup \
     -stats \
     -limit-rate 20000 \
