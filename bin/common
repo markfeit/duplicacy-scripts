@@ -13,9 +13,8 @@ NAME=duplicacy-scripts
 WHEREAMI=$(dirname $0)
 WHOAMI=$(basename $0)
 
-PREFS=$(cd "${WHEREAMI}/.." && pwd -P)
-TOP=$(cd "${PREFS}/.." && pwd -P)
-ROOT=$(cd "${TOP}/root" && pwd -P)
+PREFS=$(cd "${WHEREAMI}/.." && pwd)
+TOP=$(cd "${PREFS}/.." && pwd)
 BIN="${PREFS}/bin"
 ETC="${PREFS}/etc"
 LIB="${PREFS}/lib"
@@ -23,6 +22,8 @@ VAR="${PREFS}/var"
 
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
+
+BACKUP_ROOT=$(cd "${TOP}/root" && pwd -P)
 
 PATH=${BIN}:${PATH}
 
