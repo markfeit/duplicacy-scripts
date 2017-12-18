@@ -15,7 +15,7 @@ WHOAMI=$(basename $0)
 
 PREFS=$(cd "${WHEREAMI}/.." && pwd)
 TOP=$(cd "${PREFS}/.." && pwd)
-
+ROOT=$(cd "${TOP}/root" && pwd)
 BIN="${PREFS}/bin"
 ETC="${PREFS}/etc"
 LIB="${PREFS}/lib"

@@ -26,7 +26,7 @@ PRUNESPEC=$( \
 # TODO: Decide when to do an exhaustive pruning.  Maybe once every
 # two weeks.
 
-cd "${TOP}"
+cd "${ROOT}"
 
 duplicacy prune ${PRUNESPEC}
 

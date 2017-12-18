@@ -6,13 +6,13 @@
 . $(dirname $0)/common
 
 <<EOF cat
-Backing up ${TOP}
+Backing up ${ROOT}
 
 EOF
 
 avoid_running_backup
 
-cd "${TOP}"
+cd "${ROOT}"
 
 exec duplicacy \
     backup \
