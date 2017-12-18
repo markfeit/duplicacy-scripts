@@ -13,12 +13,12 @@ NAME=duplicacy-scripts
 WHEREAMI=$(dirname $0)
 WHOAMI=$(basename $0)
 
-TOP=$(cd "${WHEREAMI}/.." && pwd)
-PREFS=$(cd "${TOP}/prefs" && pwd)
-BIN="${PREFS}/bin"
-ETC="${PREFS}/etc"
-LIB="${PREFS}/lib"
-VAR="${PREFS}/var"
+TOP=$(cd "${WHEREAMI}/.." && pwd -P)
+PREFS="${TOP}/prefs"
+BIN="${TOP}/bin"
+ETC="${TOP}/etc"
+LIB="${TOP}/lib"
+VAR="${TOP}/var"
 
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
