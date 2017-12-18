@@ -64,6 +64,7 @@ install: $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	$(PREFS) $(LOCATION_FILE)
 	cp -r bin/* $(BIN)
 	cp -r etc/* $(ETC)
+	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
 	VISUAL=$(BIN)/crontab-install crontab -e
 
