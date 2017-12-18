@@ -37,7 +37,6 @@ die()
 
 # Run a duplicacy command from the right place
 duplicacy_cmd()
-backup_root()
 {
     [ -d "${TOP}/root" ] \
 	|| die "Can't find backup root"
