@@ -66,13 +66,13 @@ log()
 avoid_running_backup()
 {
     RUNNING_PID=$( \
-	ps -o pid,args \
+	ps -e -o pid,args \
         | awk '$2 == "duplicacy" && $3 == "backup" { print $1 }' \
         )
 
     if [ -n "${RUNNING_PID}" ]
     then
-        echo "Backup is already running, PID ${RUNNING_PID}" | log
+        echo "Backup is already running, PID ${RUNNING_PID}"
         exit 0
     fi
 }
