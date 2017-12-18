@@ -7,6 +7,7 @@
 
 avoid_running_backup
 
+BACKUP_ROOT=$(backup_root)
 PRUNES="${ETC}/prune"
 
 if [ ! -f "${PRUNES}" -o ! -r "${PRUNES}" ]

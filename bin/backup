@@ -5,6 +5,8 @@
 
 . $(dirname $0)/common
 
+BACKUP_ROOT=$(backup_root)
+
 <<EOF cat
 Backing up ${BACKUP_ROOT}
 

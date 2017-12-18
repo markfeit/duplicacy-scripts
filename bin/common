@@ -23,9 +23,26 @@ VAR="${PREFS}/var"
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
 
-BACKUP_ROOT=$(cd "${TOP}/root" && pwd -P)
-
 PATH=${BIN}:${PATH}
+
+
+# Exit with an error
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+
+
+# Return the physical root directory of the backup
+backup_root()
+{
+    [ -d "${TOP}/root" ] \
+    || die "Can't find backup root"
+    
+    (cd "${TOP}/root" && pwd -P)
+}
 
 
 #
@@ -80,12 +97,6 @@ avoid_running_backup()
 
 
 
-# Exit with an error
-die()
-{
-    echo "$@" 1>&2
-    exit 1
-}
 
 
 
