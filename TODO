@@ -6,3 +6,7 @@ RESTORE SCRIPT:
  - Find correct snapshot for a certain date
  - Restore into original place or a separate tree
 
+
+MISC:
+ - Move prefs/cache to var and make symlink during installation
+ 
