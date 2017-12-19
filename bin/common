@@ -96,23 +96,3 @@ avoid_running_backup()
         exit 0
     fi
 }
-
-
-
-
-
-
-
-
-
-#
-# Unused parts
-#
-
-list_backups()
-{
-    duplicacy_cmd list \
-	| egrep -e '^Snapshot ' \
-	| awk '{ printf "%sT%s %s Rev. %s\n", $7, $8, $2, $4 }' \
-	| sort -r
-}

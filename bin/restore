@@ -1,0 +1,196 @@
+#!/bin/sh -e
+#
+# Restore files from a backup
+#
+# Usage:
+#
+#   restore OPTIONS PATH [ PATH ... ]
+#
+# Where PATH is a path to a directory or file.  If a PATH exists in
+# the file system, it will be restored as its type (file or
+# directory).  If it does not exist, append a slash to force it to be
+# treated as a directory.  PATHs beginning with "+", "-", "i:" or "e:"
+# will be passed directly to Duplicacy and used as filters.
+#
+# Options:
+#
+#   --dest DIR     Restore to DIR.  DIR must be nonexistant or empty.
+#   --list         List the snapshot times and exit
+#   --time TIME    An ISO 8601 timestamp indicating the desired time
+#                  from which the file is to be restored.  The default
+#                  is the current time.  (Example:  2018-06-13T17:50)
+#
+# If no --dest is supplied, the files will be restored relative to the
+# root.
+#
+
+. $(dirname $0)/common
+
+
+# Dump a list of the snapshot dates and numbers in a machine-readable
+# format.
+list_snapshots()
+{
+    duplicacy_cmd list \
+	| egrep -e '^Snapshot ' \
+	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
+}
+
+
+
+# Gargle the arguments
+
+DEST=""
+LIST=false
+RESTORE_TIME=$(date +"%Y-%m-%dT%H:%M")
+
+while echo "$1" | egrep -q -e '^--'
+do
+    ARG="$1"
+    shift
+    case "${ARG}" in
+	--dest)
+	    DEST=$1
+	    shift
+	    ;;
+	--list)
+	    LIST=true
+	    ;;
+	--time)
+	    RESTORE_TIME="$1"
+	    shift
+	    ;;
+	*)
+	    die "Unknown option ${ARG}"
+	    ;;
+    esac
+done
+
+
+# Handle the easy-out case
+if ${LIST}
+then
+    list_snapshots | awk '{ print $1 }'
+    exit 0
+fi
+
+
+# Validate everything
+
+[ "$#" -gt 0 ] \
+    || die "Usage: ${WHOAMI} OPTIONS PATH [ PATH ... ]"
+
+if [ -d "${DEST}" ]
+then
+    [ "$(ls -a "${DEST}" | wc -l)" -gt 2 ] \
+	&& die "${DEST}: Must be empty."
+fi
+
+# This validates ISO8601 down to seconds.
+REGEX='^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])'
+REGEX+='T(2[0-3]|[01][0-9]):[0-5][0-9]$'
+echo "${RESTORE_TIME}" | egrep -q -e "${REGEX}" \
+    || die "Invalid time ${RESTORE_TIME}"
+
+
+
+
+
+# Translate all of the arguments into Duplicacy filters
+
+analyze_paths()
+{
+    for FILE in "$@"
+    do
+
+	# Try to divine the physical path of the file
+	if [ -d "${FILE}" ]
+	then
+	    FILE=$(cd "${FILE}" && pwd -P)
+	elif [ -f "${FILE}" ]
+	then
+	    FILE=$(cd $(dirname "${FILE}") && pwd -P)/$(basename "${FILE}")
+	else
+	    true
+	fi
+	
+	FILE=$(echo "${FILE}" | sed -e 's|^/||')
+	case "${FILE}" in
+	    -*|+*|i:*|e:*)
+		# Straight-through filters
+		;;
+	    */)
+		# Explicit directories
+		FILE="+${FILE}/*"
+		;;
+	    *)
+		# Educated guesses
+		GUESS="${TOP}/root/${FILE}"
+		if [ -d "${GUESS}" ]
+		then
+		    FILE="+${FILE}/*"
+		elif [ -f "${GUESS}" ]
+		then
+		    FILE="+${FILE}"
+		else
+		    FILE="+${FILE}"
+		fi
+		;;
+	esac
+	echo "${FILE}"
+    done
+}
+
+set -- $(analyze_paths "$@")
+
+
+
+
+
+# Sort the desired time into the list of snapshots and pick out the
+# one just before it.
+
+SNAPSHOT_LINE=$( \
+    ( list_snapshots | sed -e 's/$/ S/g' && echo "${RESTORE_TIME} XX R" ) \
+	| sort \
+	| sed '/ R$/,//d' \
+	| tail -1 \
+	     )
+
+[ -n "${SNAPSHOT_LINE}" ] \
+    || die "No backups available for ${RESTORE_TIME}."
+
+REVISION=$(echo "${SNAPSHOT_LINE}" | awk '{ print $2 }')
+REVISION_TIME=$(echo "${SNAPSHOT_LINE}" | awk '{ print $1 }')
+
+
+# TODO: Make output quiet if stdout is not a tty.
+
+echo "Restoring from revision ${REVISION} as of ${REVISION_TIME}"
+
+if [ -z "${DEST}" ]
+then
+    DEST="${TOP}/root"
+else
+    mkdir -p "${DEST}"
+    echo "${PREFS}" > "${DEST}/.duplicacy"
+fi
+
+
+echo "Restoring to ${DEST}"
+
+cd "${DEST}"
+
+duplicacy \
+    restore \
+    -r "${REVISION}" \
+    -stats \
+    "$@" \
+    | tee "${DEST}/RESTORE-LOG"
+
+
+# Clean up any leftovers
+
+rm -f "${DEST}/.duplicacy"
+
+exit 0
