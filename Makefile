@@ -17,7 +17,7 @@ DEST=/system/duplicacy
 #DEST=/tmp/duplicacy-scripts
 
 DUPLICACY_BINARY=duplicacy_linux_x64_2.0.10
-
+DIST_CLEAN += $(DUPLICACY_BINARY)
 
 # No user-serviceable parts below this point.
 
@@ -80,3 +80,6 @@ uninstall:
 clean:
 	rm -rf $(TO_CLEAN)
 	find . -name "*~" | xargs rm -f
+
+distclean: clean
+	rm -rf $(DIST_CLEAN)
