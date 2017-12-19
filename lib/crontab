@@ -4,10 +4,9 @@
 
 # Minute, Hour, DoM, Month, DoW
 
-# Backups every four hours
+# Backups
 #Min Hour DoM Mon DoW  Command
 45   0    *   *   *    __BIN__/cron-backup
-
 
 # Routine Maintenance
 #Min Hour DoM Mon DoW  Command
