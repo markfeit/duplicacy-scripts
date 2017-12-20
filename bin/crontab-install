@@ -1,17 +1,13 @@
 #!/bin/sh -e
 #
-# Insert the crontab into the current user's crontab
+# Insert the crontab into the one provided on stdin and put the result
+# onto stdout.
 #
 
 . $(dirname $0)/common
 
-FILE="$1"
-shift
-[ -e "${FILE}" -a -r "${FILE}" -a -w "${FILE}" ] \
-    || die "${FILE}: Unreadable or unwritable."
+sed -e "/^#BEGIN-${NAME}/,/^#END-${NAME}/d"
 
-sed -i -e "/^#BEGIN-${NAME}/,/^#END-${NAME}/d" "${FILE}"
-
-echo "#BEGIN-${NAME}" >> "${FILE}"
-cat "${LIB}/crontab" >> "${FILE}"
-echo "#END-${NAME}" >> "${FILE}"
+echo "#BEGIN-${NAME}"
+cat "${LIB}/crontab"
+echo "#END-${NAME}"

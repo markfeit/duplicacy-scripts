@@ -66,14 +66,14 @@ install: $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	cp -r etc/* $(ETC)
 	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
-	VISUAL=$(BIN)/crontab-install crontab -e
+	crontab -l | $(BIN)/crontab-install | crontab -
 
 update:
 	git pull
 	$(MAKE) install
 
 uninstall:
-	VISUAL=$(BIN)/crontab-remove crontab -e
+	crontab -l | $(BIN)/crontab-remove | crontab -
 	@echo "Note:  All this did was disable the cron jobs."
 
 
