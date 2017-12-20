@@ -8,6 +8,7 @@
 avoid_running_backup
 
 duplicacy_cmd \
+    -v \
     backup \
     -stats \
     -limit-rate 20000 \

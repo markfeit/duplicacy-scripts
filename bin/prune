@@ -26,6 +26,6 @@ PRUNESPEC=$( \
 # TODO: Decide when to do an exhaustive pruning.  Maybe once every
 # two weeks.
 
-duplicacy_cmd prune ${PRUNESPEC}
+duplicacy_cmd -v prune ${PRUNESPEC}
 
 exit 0
