@@ -74,6 +74,7 @@ install: $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
 	crontab -l | $(BIN)/crontab-install | crontab -
+TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE) $(LINKED_BINARY)
 
 update:
 	git pull
@@ -81,7 +82,8 @@ update:
 
 uninstall:
 	crontab -l | $(BIN)/crontab-remove | crontab -
-	@echo "Note:  All this did was disable the cron jobs."
+	rm -rf $(TO_UNINSTALL)
+	@echo "NOTE:  Configuration, cache and logs were left in place."
 
 
 clean:
