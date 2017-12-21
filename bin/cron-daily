@@ -15,6 +15,3 @@ rm -rf ${HOLE}/*
 do_maint && log prune "${BIN}/prune"
 
 exit 0
-
-
-
