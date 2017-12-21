@@ -28,6 +28,9 @@ BIN=$(DEST)/bin
 ETC=$(DEST)/etc
 LIB=$(DEST)/lib
 PREFS=$(DEST)/prefs
+VAR=$(DEST)/var
+
+HOLE=$(VAR)/hole
 
 
 default:
@@ -93,6 +96,9 @@ install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	done
 	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
+	mkdir -p "$(HOLE)"
+	rm -rf "$(DEST)/prefs/logs"
+	ln -s "../var/hole" "$(DEST)/prefs/logs"
 	crontab -l | $(BIN)/crontab-install | crontab -
 
 # $(LINKED_BINARY) is a special case that gets handled in the
