@@ -8,6 +8,9 @@
 # Remove old logs
 find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
 
+# Clear out the black hole.  Prune writes empty logs here.
+rm -rf ${HOLE}/*
+
 # Prune old snapshots
 do_maint && log prune "${BIN}/prune"
 

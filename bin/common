@@ -23,6 +23,9 @@ VAR="${TOP}/var"
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
 
+HOLE="${VAR}/hole"
+mkdir -p "${HOLE}"
+
 PATH=${BIN}:${PATH}
 
 

@@ -58,8 +58,8 @@ $(BIN)/duplicacy: $(BIN)/$(DUPLICACY_BINARY) $(BIN)
 
 LINKED_BINARY=$(BINARY_LINK)/duplicacy
 $(LINKED_BINARY): $(BIN)/$(DUPLICACY_BINARY)
-	rm -f $@
-	ln -s $< $@
+	if [ -w "$(BINARY_LINK)" ]; then rm -f $@ ; fi
+	if [ -w "$(BINARY_LINK)" ]; then ln -s $< $@ ; fi
 
 
 # Crontab
@@ -94,7 +94,10 @@ install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
 	crontab -l | $(BIN)/crontab-install | crontab -
-TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE) $(LINKED_BINARY)
+
+# $(LINKED_BINARY) is a special case that gets handled in the
+# uninstall target.
+TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE)
 
 
 update:
@@ -104,6 +107,7 @@ update:
 uninstall:
 	crontab -l | $(BIN)/crontab-remove | crontab -
 	rm -rf $(TO_UNINSTALL)
+	if [ -w "$(BINARY_LINK)" ]; then rm -f "$(LINKED_BINARY)" ; fi
 	@echo "NOTE:  Configuration, cache and logs were left in place."
 
 
