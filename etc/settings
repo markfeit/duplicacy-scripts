@@ -1,0 +1,16 @@
+#
+# Settings for Duplicacy scripts
+#
+
+# NOTE: If this file exists during an upgrade, it will be left alone
+# and the new version will be placed in settings-upgrade.
+
+# If defined, limit bandwidth use to this value in megabits per
+# second.  (This contrasts with Duplicacy's parameter, which is
+# expressed in kilobytes per second.)
+CONFIG_BANDWIDTH=20
+
+# If this is not set, skip doing storage maintenance.  Setting this is
+# useful when multiple machines share the same storage and saves on
+# download traffic if the storage is a paid service.
+CONFIG_NO_MAINT=yes

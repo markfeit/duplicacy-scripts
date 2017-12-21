@@ -67,14 +67,35 @@ CRONTAB=$(LIB)/crontab
 $(CRONTAB): lib/crontab $(LIB) 
 	sed -e 's|__BIN__|$(BIN)|g' $< > $@
 
-install: $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
+
+
+
+# If files in etc differ from what was installed, install them as
+# *-upgrade and let the user sort it out.
+
+install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	$(PREFS) $(LOCATION_FILE) $(LINKED_BINARY)
 	cp -r bin/* $(BIN)
-	cp -r etc/* $(ETC)
+	for FILE in etc/* ; \
+	do \
+	    BASE=$$(basename "$${FILE}") ; \
+	    if [ ! -e "$(ETC)/$${BASE}" ] ; \
+	    then \
+	        cp -f "$${FILE}" "$(ETC)" ; \
+	    else \
+	        [ -e "$(ETC)/$${BASE}" ] \
+	            && diff "$${FILE}" "$(ETC)/$${BASE}" > /dev/null \
+	            && continue ; \
+	        [ -e "$(ETC)/$$BASE" ] \
+	            && cp -f "$${FILE}" "$(ETC)/$${BASE}-upgrade" \
+	            || cp -f "$${FILE}" "$(ETC)" ; \
+	    fi ; \
+	done
 	rm -f $(DEST)/root
 	ln -s "$(ROOT)" $(DEST)/root
 	crontab -l | $(BIN)/crontab-install | crontab -
 TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE) $(LINKED_BINARY)
+
 
 update:
 	git pull

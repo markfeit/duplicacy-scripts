@@ -11,5 +11,5 @@ duplicacy_cmd \
     -v \
     backup \
     -stats \
-    -limit-rate 20000 \
+    $(limit_rate) \
     "$@"

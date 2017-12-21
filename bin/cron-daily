@@ -9,7 +9,7 @@
 find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
 
 # Prune old snapshots
-log prune "${BIN}/prune"
+do_maint && log prune "${BIN}/prune"
 
 exit 0
 

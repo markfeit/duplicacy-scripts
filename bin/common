@@ -26,6 +26,9 @@ mkdir -p "${LOG}"
 PATH=${BIN}:${PATH}
 
 
+# Read the settings file if it exists
+[ -e "${ETC}/settings" ] && . "${ETC}/settings"
+
 # Exit with an error
 die()
 {
@@ -33,6 +36,18 @@ die()
     exit 1
 }
 
+
+# Determine if this host should do maintenance
+do_maint()
+{
+    if [ -z "${CONFIG_NO_MAINT}" ]
+    then
+	return 0
+    else
+	return 1
+    fi
+    die "Not reached."
+}
 
 
 # Run a duplicacy command from the right place
@@ -45,6 +60,20 @@ duplicacy_cmd()
 }
 
 
+# Return the command-line switch for the bandwidth limit if one is
+# configured.
+limit_rate()
+{
+    if echo "${CONFIG_BANDWIDTH}" | egrep -q -e '^([0-9]+)?$'
+    then
+	if [ -n "${CONFIG_BANDWIDTH}" ]
+	then
+	    echo "-limit-rate" "$((${CONFIG_BANDWIDTH} / 8 * 1000))"
+	fi
+    else
+	die "Invalid configured bandwidth '${CONFIG_BANDWIDTH}'"
+    fi
+}
 
 
 #
