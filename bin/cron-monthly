@@ -5,6 +5,6 @@
 
 . $(dirname $0)/common
 
-# Do an exhaustive prune 
+# Nothing yet
 
 exit 0

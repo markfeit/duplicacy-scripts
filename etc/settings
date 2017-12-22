@@ -7,14 +7,14 @@
 
 # If this is set, do an automatic update of the scripts by pulling
 # the sources from GitHub and doing a 'make update'.
-CONFIG_AUTO_UPGRADE=yes
+# CONFIG_AUTO_UPGRADE=yes
 
 # If defined, limit bandwidth use to this value in megabits per
 # second.  (This contrasts with Duplicacy's parameter, which is
 # expressed in kilobytes per second.)
-CONFIG_BANDWIDTH=20
+# CONFIG_BANDWIDTH=20
 
 # If this is not set, skip doing storage maintenance.  Setting this is
 # useful when multiple machines share the same storage and saves on
 # download traffic if the storage is a paid service.
-CONFIG_NO_MAINT=yes
+# CONFIG_NO_MAINT=yes
