@@ -87,7 +87,7 @@ ifeq ($(NO_GIT),)
 	rm -rf $@
 	mkdir -p $@
 	cp -r * .??* $@
-	git -C $@ remote set-url origin "$(GIT_URL)"
+	(cd "$@" && git remote set-url origin "$(GIT_URL)")
 else
 	@echo "Already in sources pulled from GitHub"
 endif
