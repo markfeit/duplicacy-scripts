@@ -75,8 +75,9 @@ $(LINKED_BINARY): $(BIN)/$(DUPLICACY_BINARY)
 
 # Crontab
 CRONTAB=$(LIB)/crontab
-$(CRONTAB): lib/crontab $(LIB) 
-	sed -e 's|__BIN__|$(BIN)|g' $< > $@
+$(CRONTAB)::
+	mkdir -p $(LIB)
+	sed -e 's|__BIN__|$(BIN)|g' lib/crontab > $@
 
 
 # Prime updating with a full copy of the sources unless we're already
