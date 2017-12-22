@@ -12,6 +12,16 @@ find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
 rm -rf ${HOLE}/*
 
 # Prune old snapshots
-do_maint && log prune "${BIN}/prune"
+# do_maint && log prune "${BIN}/prune"
+
+# Do a self-update.
+if [ -n "${CONFIG_AUTO_UPDATE}" ]
+then
+    UPDATE_DIR="${VAR}/update"
+    [ -d "${UPDATE_DIR}/.git" ] \
+	|| die "Unable to find sources in ${UPDATE_DIR}"
+
+    log update make -C "${UPDATE_DIR}" DEST="${TOP}" ROOT="${TOP}/root" update
+fi
 
 exit 0

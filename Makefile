@@ -24,6 +24,8 @@ BINARY_LINK=/usr/local/bin
 
 # No user-serviceable parts below this point.
 
+GIT_URL=https://github.com/markfeit/duplicacy-scripts.git
+
 BIN=$(DEST)/bin
 ETC=$(DEST)/etc
 LIB=$(DEST)/lib
@@ -31,6 +33,7 @@ PREFS=$(DEST)/prefs
 VAR=$(DEST)/var
 
 HOLE=$(VAR)/hole
+UPDATE=$(VAR)/update
 
 
 default:
@@ -40,12 +43,17 @@ default:
 $(DEST):
 	mkdir -p $@
 
+$(DEST)/root:
+	rm -f $@
+	ln -s "$(ROOT)" $@
+
 $(DEST)/%:
 	mkdir -p $@
 
 # File that points Duplicacy at its local storage
 LOCATION_FILE=$(ROOT)/.duplicacy
 $(LOCATION_FILE): $(ROOT)
+	rm -f $@
 	echo "$(DEST)/prefs" > $@
 
 
@@ -71,13 +79,24 @@ $(CRONTAB): lib/crontab $(LIB)
 	sed -e 's|__BIN__|$(BIN)|g' $< > $@
 
 
+# Prime updating with a full copy of the sources unless we're already
+# doing an update from that directory.
 
+$(UPDATE)::
+ifeq ($(NO_GIT),)
+	rm -rf $@
+	mkdir -p $@
+	cp -r * .??* $@
+	git -C $@ remote set-url origin "$(GIT_URL)"
+else
+	@echo "Already in sources pulled from GitHub"
+endif
 
 # If files in etc differ from what was installed, install them as
 # *-upgrade and let the user sort it out.
 
 install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
-	$(PREFS) $(LOCATION_FILE) $(LINKED_BINARY)
+	$(PREFS) $(LOCATION_FILE) $(LINKED_BINARY) $(UPDATE)
 	cp -r bin/* $(BIN)
 	for FILE in etc/* ; \
 	do \
@@ -94,8 +113,6 @@ install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	            || cp -f "$${FILE}" "$(ETC)" ; \
 	    fi ; \
 	done
-	rm -f $(DEST)/root
-	ln -s "$(ROOT)" $(DEST)/root
 	mkdir -p "$(HOLE)"
 	rm -rf "$(DEST)/prefs/logs"
 	ln -s "../var/hole" "$(DEST)/prefs/logs"
@@ -108,7 +125,7 @@ TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE)
 
 update:
 	git pull
-	$(MAKE) install
+	$(MAKE) NO_GIT=1 install
 
 uninstall:
 	crontab -l | $(BIN)/crontab-remove | crontab -
