@@ -5,6 +5,6 @@
 
 . $(dirname $0)/common
 
-# Nothing to do here.
+do_maint && log exhaustive duplicacy -v prune -exhaustive
 
 exit 0
