@@ -12,7 +12,7 @@ find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
 rm -rf ${HOLE}/*
 
 # Prune old snapshots
-# do_maint && log prune "${BIN}/prune"
+do_maint && log prune "${BIN}/prune"
 
 # Do a self-update.
 if [ -n "${CONFIG_AUTO_UPDATE}" ]
