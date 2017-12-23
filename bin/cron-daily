@@ -14,14 +14,7 @@ rm -rf ${HOLE}/*
 # Prune old snapshots
 do_maint && log prune "${BIN}/prune"
 
-# Do a self-update.
-if [ -n "${CONFIG_AUTO_UPDATE}" ]
-then
-    UPDATE_DIR="${VAR}/update"
-    [ -d "${UPDATE_DIR}/.git" ] \
-	|| die "Unable to find sources in ${UPDATE_DIR}"
-
-    log update make -C "${UPDATE_DIR}" DEST="${TOP}" ROOT="${TOP}/root" update
-fi
+# Update if that's turned on.
+[ -n "${CONFIG_AUTO_UPDATE}" ] && "${BIN}/update"
 
 exit 0

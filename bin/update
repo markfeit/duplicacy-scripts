@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Do a self-update
+#
+
+. $(dirname $0)/common
+
+UPDATE_DIR="${VAR}/update"
+[ -d "${UPDATE_DIR}/.git" ] \
+    || die "Unable to find sources in ${UPDATE_DIR}"
+
+log update make -C "${UPDATE_DIR}" DEST="${TOP}" ROOT="${TOP}/root" update

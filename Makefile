@@ -32,7 +32,9 @@ LIB=$(DEST)/lib
 PREFS=$(DEST)/prefs
 VAR=$(DEST)/var
 
+CACHE=$(VAR)/cache
 HOLE=$(VAR)/hole
+LOG=$(VAR)/log
 UPDATE=$(VAR)/update
 
 
@@ -43,9 +45,11 @@ default:
 $(DEST):
 	mkdir -p $@
 
-$(DEST)/root:
+
+ROOT_LINK=$(DEST)/root
+$(ROOT_LINK): $(DEST)
 	rm -f $@
-	ln -s "$(ROOT)" $@
+	ln -s "$(shell cd $(ROOT) && pwd -P)" $@
 
 $(DEST)/%:
 	mkdir -p $@
@@ -97,8 +101,17 @@ endif
 # If files in etc differ from what was installed, install them as
 # *-upgrade and let the user sort it out.
 
-install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
-	$(PREFS) $(LOCATION_FILE) $(LINKED_BINARY) $(UPDATE)
+install: \
+	clean \
+	$(BIN) $(BIN)/duplicacy \
+	$(ETC) \
+	$(LIB) \
+	$(CRONTAB) \
+	$(PREFS) \
+	$(LOCATION_FILE) \
+	$(LINKED_BINARY) \
+	$(CACHE) $(HOLE) $(LOG) $(UPDATE) \
+	$(ROOT_LINK)
 	cp -r bin/* $(BIN)
 	for FILE in etc/* ; \
 	do \
@@ -115,9 +128,9 @@ install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	            || cp -f "$${FILE}" "$(ETC)" ; \
 	    fi ; \
 	done
-	mkdir -p "$(HOLE)"
-	rm -rf "$(DEST)/prefs/logs"
+	rm -rf "$(PREFS)/logs"
 	ln -s "../var/hole" "$(PREFS)/logs"
+	rm -rf "$(PREFS)/cache"
 	ln -s "../var/cache" "$(PREFS)/cache"
 ifeq ($(TEST_BUILD),)
 	crontab -l | $(BIN)/crontab-install | crontab -
@@ -143,15 +156,20 @@ endif
 
 # Install a test copy
 TEST_DIR=test
-test::
-	rm -rf $(TEST_DIR)
-	mkdir -p $(TEST_DIR)
+TEST_DEST=$(TEST_DIR)/duplicacy
+TEST_ROOT=$(TEST_DIR)/root
+
+$(TEST_ROOT) $(TEST_DEST):
+	rm -rf $@
+	mkdir -p $@
+
+test: $(TEST_ROOT) $(TEST_DEST)
 	$(MAKE) \
-	    DEST=$(TEST_DIR)/$(DEST) \
-	    ROOT=$(TEST_DIR)/$(ROOT) \
+	    DEST=$(TEST_DEST) \
+	    ROOT=$(TEST_ROOT) \
 	    TEST_BUILD=1 \
 	    install
-TO_CLEAN += $(TEST_DIR)
+TO_CLEAN += $(TEST_DIR) $(TEST_ROOT)
 
 
 clean:
