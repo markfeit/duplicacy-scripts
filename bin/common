@@ -71,7 +71,7 @@ limit_rate()
     then
 	if [ -n "${CONFIG_BANDWIDTH}" ]
 	then
-	    echo "-limit-rate" "$((${CONFIG_BANDWIDTH} / 8 * 1000))"
+	    echo "-limit-rate" "$((${CONFIG_BANDWIDTH} * 1000 / 8))"
 	fi
     else
 	die "Invalid configured bandwidth '${CONFIG_BANDWIDTH}'"
