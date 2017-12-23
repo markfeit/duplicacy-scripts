@@ -1,12 +1,6 @@
 List of things that need to be done:
 
 
-RESTORE SCRIPT:
- - Files or directories
- - Find correct snapshot for a certain date
- - Restore into original place or a separate tree
-
-
 MISC:
  - Move prefs/cache to var and make symlink during installation
- 
+ - Make sure failures produce output for mailing
