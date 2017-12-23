@@ -1,11 +1,10 @@
 #!/bin/sh
 #
-# Daily Maintenance
+# Run a backup
 #
 
 . $(dirname $0)/common
 
-# Prune old snapshots
 log backup "${BIN}/backup"
 
 exit 0
