@@ -54,7 +54,7 @@ $(DEST)/%:
 LOCATION_FILE=$(ROOT)/.duplicacy
 $(LOCATION_FILE): $(ROOT)
 	rm -f $@
-	echo "$(DEST)/prefs" > $@
+	echo "$(shell cd $(DEST)/prefs && pwd)" > $@
 
 
 # Duplicacy binary.
@@ -67,11 +67,12 @@ $(BIN)/duplicacy: $(BIN)/$(DUPLICACY_BINARY) $(BIN)
 	rm -f $@
 	ln -s $(DUPLICACY_BINARY) $@
 
+ifeq ($(TEST_BUILD),)
 LINKED_BINARY=$(BINARY_LINK)/duplicacy
 $(LINKED_BINARY): $(BIN)/$(DUPLICACY_BINARY)
 	if [ -w "$(BINARY_LINK)" ]; then rm -f $@ ; fi
 	if [ -w "$(BINARY_LINK)" ]; then ln -s $< $@ ; fi
-
+endif
 
 # Crontab
 CRONTAB=$(LIB)/crontab
@@ -87,7 +88,7 @@ $(UPDATE)::
 ifeq ($(NO_GIT),)
 	rm -rf $@
 	mkdir -p $@
-	cp -r * .??* $@
+	cp -r $(shell ls -a | egrep -v -e '^(\.+|test)$$') $@
 	(cd "$@" && git remote set-url origin "$(GIT_URL)")
 else
 	@echo "Already in sources pulled from GitHub"
@@ -116,8 +117,11 @@ install: clean $(BIN) $(BIN)/duplicacy $(ETC) $(LIB) $(CRONTAB) \
 	done
 	mkdir -p "$(HOLE)"
 	rm -rf "$(DEST)/prefs/logs"
-	ln -s "../var/hole" "$(DEST)/prefs/logs"
+	ln -s "../var/hole" "$(PREFS)/logs"
+	ln -s "../var/cache" "$(PREFS)/cache"
+ifeq ($(TEST_BUILD),)
 	crontab -l | $(BIN)/crontab-install | crontab -
+endif
 
 # $(LINKED_BINARY) is a special case that gets handled in the
 # uninstall target.
@@ -129,10 +133,25 @@ update:
 	$(MAKE) NO_GIT=1 install
 
 uninstall:
+ifeq ($(TEST_BUILD),)
 	crontab -l | $(BIN)/crontab-remove | crontab -
+endif
 	rm -rf $(TO_UNINSTALL)
 	if [ -w "$(BINARY_LINK)" ]; then rm -f "$(LINKED_BINARY)" ; fi
 	@echo "NOTE:  Configuration, cache and logs were left in place."
+
+
+# Install a test copy
+TEST_DIR=test
+test::
+	rm -rf $(TEST_DIR)
+	mkdir -p $(TEST_DIR)
+	$(MAKE) \
+	    DEST=$(TEST_DIR)/$(DEST) \
+	    ROOT=$(TEST_DIR)/$(ROOT) \
+	    TEST_BUILD=1 \
+	    install
+TO_CLEAN += $(TEST_DIR)
 
 
 clean:
