@@ -1,6 +1,7 @@
 #
 # Files to be ignored by Git
 #
+duplicacy_*
 test
 *~
 
