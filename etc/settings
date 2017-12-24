@@ -5,16 +5,25 @@
 # NOTE: If this file exists during an upgrade, it will be left alone
 # and the new version will be placed in settings-upgrade.
 
+
 # If this is set, do an automatic update of the scripts by pulling
 # the sources from GitHub and doing a 'make update'.
 # CONFIG_AUTO_UPDATE=yes
+
 
 # If defined, limit bandwidth use to this value in megabits per
 # second.  (This contrasts with Duplicacy's parameter, which is
 # expressed in kilobytes per second.)
 # CONFIG_BANDWIDTH=20
 
+
 # If this is not set, skip doing storage maintenance.  Setting this is
 # useful when multiple machines share the same storage and saves on
 # download traffic if the storage is a paid service.
+#
+# IMPORTANT NOTE: Maintenance should be disabled during long-running
+# initial backups.  This will prevent having unrefernced chunks from
+# the incomplete backup fossilized, resulting in additional stored
+# data and lower deduplication rates.
+
 # CONFIG_NO_MAINT=yes

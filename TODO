@@ -1,6 +1,12 @@
 List of things that need to be done:
 
 
-MISC:
- - Move prefs/cache to var and make symlink during installation
- - Make sure failures produce output for mailing
+Move prefs/cache to var and make symlink during installation
+
+Make sure maintenance operations run quietly and failures produce
+output for mailing.
+
+Rearrange CONFIG_NO_MAINT to be CONFIG_MAINT.  (Makes more sense that
+way.)
+
+Make maintenance activities avoid backups running on the local host.
