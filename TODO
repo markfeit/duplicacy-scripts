@@ -10,3 +10,10 @@ Rearrange CONFIG_NO_MAINT to be CONFIG_MAINT.  (Makes more sense that
 way.)
 
 Make maintenance activities avoid backups running on the local host.
+
+
+For Duplicacy:
+
+Write a Wasabi-specific storage module.  Wasabi supports object
+renaming, where S3 requires a copy and delete.  The latter incurs
+timed delete charges on Wasabi.
