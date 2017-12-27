@@ -77,6 +77,7 @@ Daily (03:00):
 
  * Prune old snapshots according to the rules in `etc/prune`.
  * Remove log files older than 30 days.
+ * Pull and update the software (if enabled in `$DEST/etc/settings`).
 
 Weekly (Sunday at 03:15):
 
