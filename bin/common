@@ -141,7 +141,8 @@ avoid_running_backup()
 {
     RUNNING_PID=$( \
 	ps -e -o pid,args \
-        | awk '$2 == "duplicacy" && $3 == "backup" { print $1 }' \
+	| egrep -e ' duplicacy .* backup ' \
+	| awk '$2 == "duplicacy" { print $1 }'
         )
 
     if [ -n "${RUNNING_PID}" ]
