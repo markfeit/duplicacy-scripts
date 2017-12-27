@@ -67,7 +67,7 @@ activities are stored in `$DEST/var/log`.
 
 ## Restoration
 
-Files can be restored by executing `$DEST/bin`.  Full documentation is
+Files can be restored by executing `$DEST/bin/restore`.  Full documentation is
 (for now) in that file.
 
 
