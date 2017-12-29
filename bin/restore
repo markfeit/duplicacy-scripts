@@ -16,6 +16,7 @@
 #
 #   --dest DIR     Restore to DIR.  DIR must be nonexistant or empty.
 #   --list         List the snapshot times and exit
+#   --storage ID   Use storage identified by ID (default is 'default')
 #   --time TIME    An ISO 8601 timestamp indicating the desired time
 #                  from which the file is to be restored.  The default
 #                  is the current time.  (Example:  2018-06-13T17:50)
@@ -43,6 +44,7 @@ list_snapshots()
 DEST=""
 LIST=false
 RESTORE_TIME=$(date +"%Y-%m-%dT%H:%M")
+STORAGE="default"
 
 while echo "$1" | egrep -q -e '^--'
 do
@@ -55,6 +57,10 @@ do
 	    ;;
 	--list)
 	    LIST=true
+	    ;;
+	--storage)
+	    STORAGE="$1"
+	    shift
 	    ;;
 	--time)
 	    RESTORE_TIME="$1"
@@ -185,6 +191,7 @@ duplicacy \
     restore \
     -r "${REVISION}" \
     -stats \
+    -storage "${STORAGE}" \
     "$@" \
     | tee "${DEST}/RESTORE-LOG"
 

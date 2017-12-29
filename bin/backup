@@ -7,9 +7,18 @@
 
 avoid_running_backup
 
-duplicacy_cmd \
-    -v \
-    backup \
-    -stats \
-    $(limit_rate) \
-    "$@"
+list_storage_names | ( \
+    while read NAME
+    do
+	printf "#\n# Backing up ${NAME}\n#\n\n"
+	duplicacy_cmd \
+	    -v \
+	    backup \
+	    -stats \
+	    -storage "${NAME}" \
+	    $(limit_rate) \
+	    "$@"
+    done
+    )
+
+exit 0

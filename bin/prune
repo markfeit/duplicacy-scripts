@@ -23,9 +23,13 @@ PRUNESPEC=$( \
 	| sed -e 's/^/-keep /g' \
 	 )
 
-# TODO: Decide when to do an exhaustive pruning.  Maybe once every
-# two weeks.
+list_storage_names | ( \
+    while read NAME
+    do
+	printf "#\n# Pruning ${NAME}\n#\n\n"
+	duplicacy_cmd -v prune -storage "${NAME}" ${PRUNESPEC} "$@"
+    done
+    )
 
-duplicacy_cmd -v prune ${PRUNESPEC}
 
 exit 0

@@ -15,10 +15,13 @@ WHOAMI=$(basename $0)
 
 TOP=$(cd "${WHEREAMI}/.." && pwd -P)
 PREFS="${TOP}/prefs"
+PREFERENCES=${PREFS}/preferences
 BIN="${TOP}/bin"
 ETC="${TOP}/etc"
 LIB="${TOP}/lib"
 VAR="${TOP}/var"
+
+
 
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
@@ -150,4 +153,17 @@ avoid_running_backup()
         echo "Backup is already running, PID ${RUNNING_PID}"
         exit 0
     fi
+}
+
+
+# Get a list of the storage names in the preferences.
+
+# TODO: This is highly dependent on the formatting of the file, which
+#  is JSON and shouldn't matter.
+
+list_storage_names()
+{
+    < "${PREFERENCES}" \
+      egrep -e '"name":\s*"[^"]+"' \
+      | sed -e 's/^.*"name":\s*"\([^"]*\)".*$/\1/'
 }

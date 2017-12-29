@@ -5,6 +5,6 @@
 
 . $(dirname $0)/common
 
-do_maint && log exhaustive duplicacy -v prune -exhaustive
+do_maint && log exhaustive "${BIN}/prune" -exhaustive
 
 exit 0
