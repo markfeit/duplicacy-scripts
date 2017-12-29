@@ -106,7 +106,7 @@ log()
     then
 
 	# Build the output separately because the shell doesn't always flush.
-	LOG_BUILD="${HOLE}.$$.build"
+	LOG_BUILD="${HOLE}/log-build.$$"
 
 	# Exit status catcher from
         # https://unix.stackexchange.com/a/70675/15184
