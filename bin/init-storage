@@ -1,0 +1,33 @@
+#!/bin/sh -e
+#
+# Initialize an empty local directory for storage
+#
+# Usage: init-storage ARGS
+#
+# ARGS is the same set of arguments that would be passed to 'duplicacy
+# init', normally -e snap-name /path/to/storage
+#
+
+. $(dirname $0)/common
+
+# Last argument is the directory.
+eval DIR=\${$#}
+
+[ -e "${DIR}" ] \
+    || mkdir -p "${DIR}"
+
+[ -d "${DIR}" ] \
+    || die "${DIR}: Not a directory."
+
+[ "$(ls -a "${DIR}" | wc -l)" -eq 2 ] \
+    || die "${DIR}: Not empty"
+
+
+# Duplicacy assumes $CWD is your root and leaves a .duplicacy
+# directory there.  Let it be created in the storage directory and get
+# rid of it later.
+cd "${DIR}"
+
+duplicacy init "$@"
+
+exec rm -rf "${DIR}/.duplicacy"
