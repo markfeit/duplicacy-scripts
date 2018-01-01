@@ -10,7 +10,7 @@ avoid_running_backup
 list_storage_names | ( \
     while read NAME
     do
-	printf "#\n# Backing up ${NAME}\n#\n\n"
+	printf "\n#\n# Backing up to ${NAME}\n#\n\n"
 	duplicacy_cmd \
 	    -v \
 	    backup \
