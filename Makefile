@@ -96,7 +96,7 @@ ifeq ($(NO_GIT),)
 	cp -r $(shell ls -a | egrep -v -e '^(\.+|test)$$') $@
 	(cd "$@" && git remote set-url origin "$(GIT_URL)")
 else
-	@echo "Already in sources pulled from GitHub"
+	@true
 endif
 
 # If files in etc differ from what was installed, install them as
