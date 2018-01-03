@@ -198,6 +198,6 @@ duplicacy \
 
 # Clean up any leftovers
 
-rm -f "${DEST}/.duplicacy"
+rm -rf "${DEST}/.duplicacy"
 
 exit 0
