@@ -25,6 +25,7 @@ BINARY_LINK=/usr/local/bin
 # No user-serviceable parts below this point.
 
 GIT_URL=https://github.com/markfeit/duplicacy-scripts.git
+GIT_BRANCH=origin/master
 
 BIN=$(DEST)/bin
 ETC=$(DEST)/etc
