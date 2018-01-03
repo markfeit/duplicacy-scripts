@@ -142,8 +142,13 @@ TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE)
 
 
 update:
-	git pull
-	$(MAKE) NO_GIT=1 install
+	git fetch
+	if [ $$(git diff $(GIT_BRANCH) | wc -l) -gt 0 ]; \
+	then \
+	    git merge $(GIT_BRANCH) \
+	    && $(MAKE) NO_GIT=1 install ; \
+	fi
+
 
 uninstall:
 ifeq ($(TEST_BUILD),)
