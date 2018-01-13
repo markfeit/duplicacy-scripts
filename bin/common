@@ -110,18 +110,18 @@ log()
 
 	# Exit status catcher from
         # https://unix.stackexchange.com/a/70675/15184
-	(((("$@" 2>&1 ; echo $? >&3) | tee "${LOG_BUILD}" >&4) 3>&1) | (read xs; exit $xs)) 4>&1
+	(((("$@" 2>&1 ; echo $? >&3) >&4) 3>&1) | (read xs; exit $xs)) > "${LOG_BUILD}" 4>&1 
 	STATUS=$?
-	PRODUCE_ON_STDERR=false
+	PRODUCE_ON_STDERR=true
 
-        cat "${LOG_BUILD}" >> "${OUT_LOG}"
+	cat "${LOG_BUILD}" >> "${OUT_LOG}"
 	rm -f "${LOG_BUILD}"
 
     else
 
 	"$@" 2>&1 >> "${OUT_LOG}"
 	STATUS=$?
-	PRODUCE_ON_STDERR=true
+	PRODUCE_ON_STDERR=false
 
     fi
 
