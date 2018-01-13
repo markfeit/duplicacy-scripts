@@ -4,6 +4,11 @@
 
 # Minute, Hour, DoM, Month, DoW
 
+
+# Software update.  Do this well before anything else.
+#Min Hour DoM Mon DoW  Command
+0    0    *   *   *    __BIN__/update
+
 # Backups
 #Min Hour DoM Mon DoW  Command
 45   0    *   *   *    __BIN__/cron-backup

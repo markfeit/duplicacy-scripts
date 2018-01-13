@@ -14,7 +14,4 @@ rm -rf ${HOLE}/*
 # Prune old snapshots
 do_maint && log prune "${BIN}/prune"
 
-# Update if that's turned on.
-[ -n "${CONFIG_AUTO_UPDATE}" ] && "${BIN}/update"
-
 exit 0

@@ -5,6 +5,11 @@
 
 . $(dirname $0)/common
 
+# If not doing updates, exit quietly.
+[ -n "${CONFIG_AUTO_UPDATE}" ] \
+    || exit 0
+
+
 UPDATE_DIR="${VAR}/update"
 [ -d "${UPDATE_DIR}/.git" ] \
     || die "Unable to find sources in ${UPDATE_DIR}"
