@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Do a full check and repair of all storage
+#
+
+. $(dirname $0)/common
+
+avoid_running_backup
+
+list_storage_names | ( \
+    while read NAME
+    do
+	printf "#\n# Checking ${NAME}\n#\n\n"
+	duplicacy_cmd -v check -all -stats -fossils -resurrect \
+		      -tabular -storage "${NAME}"
+    done
+    )
+
+exit 0
