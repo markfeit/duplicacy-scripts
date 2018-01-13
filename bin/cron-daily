@@ -6,7 +6,7 @@
 . $(dirname $0)/common
 
 # Remove old logs
-find "${LOG}" -depth -mtime +30 -print0 | xargs -0 rm -rf
+find "${LOG}" -depth -mtime +90 -print0 | xargs -0 rm -rf
 
 # Clear out the black hole.  Prune writes empty logs here.
 rm -rf ${HOLE}/*
