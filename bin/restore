@@ -32,7 +32,9 @@
 # format.
 list_snapshots()
 {
-    duplicacy_cmd list \
+    local OPT=
+    [ -n "$1" ] && OPT="--storage $1"
+    duplicacy_cmd list ${OPT}\
 	| egrep -e '^Snapshot ' \
 	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
 }
@@ -76,7 +78,7 @@ done
 # Handle the easy-out case
 if ${LIST}
 then
-    list_snapshots | awk '{ print $1 }'
+    list_snapshots "${STORAGE}" | awk '{ print $1 }'
     exit 0
 fi
 
@@ -157,7 +159,7 @@ set -- $(analyze_paths "$@")
 # one just before it.
 
 SNAPSHOT_LINE=$( \
-    ( list_snapshots | sed -e 's/$/ S/g' && echo "${RESTORE_TIME} XX R" ) \
+    ( list_snapshots "${STORAGE}" | sed -e 's/$/ S/g' && echo "${RESTORE_TIME} XX R" ) \
 	| sort \
 	| sed '/ R$/,//d' \
 	| tail -1 \
@@ -172,7 +174,7 @@ REVISION_TIME=$(echo "${SNAPSHOT_LINE}" | awk '{ print $1 }')
 
 # TODO: Make output quiet if stdout is not a tty.
 
-echo "Restoring from revision ${REVISION} as of ${REVISION_TIME}"
+echo "Restoring from revision ${REVISION} as of ${REVISION_TIME} from ${STORAGE}"
 
 if [ -z "${DEST}" ]
 then
