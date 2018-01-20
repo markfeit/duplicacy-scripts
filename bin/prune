@@ -26,7 +26,7 @@ PRUNESPEC=$( \
 list_storage_names | ( \
     while read NAME
     do
-	printf "#\n# Pruning ${NAME}\n#\n\n"
+	printf "\n#\n# Pruning ${NAME}\n#\n\n"
 	duplicacy_cmd -v prune -storage "${NAME}" ${PRUNESPEC} "$@"
     done
     )
