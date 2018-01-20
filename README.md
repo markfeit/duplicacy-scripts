@@ -23,8 +23,10 @@ Clone this repository:  `git clone https://github.com/markfeit/duplicacy-scripts
 
 Download the Duplicacy binary from [Gilbert Chen's release
 page](https://github.com/gilbertchen/duplicacy/releases) and place the
-file in `duplicacy-scripts`.  Note that the license for Duplicacy
-imposes some restrictions on its use.  Please abide by them.
+file in `duplicacy-scripts` or [build one of your
+own](https://github.com/markfeit/duplicacy-dev).  Note that the
+license for Duplicacy imposes some restrictions on its use.  Please
+abide by them.
 
 Select a location where duplicacy-scripts, the Duplicacy
 configuration, its cache and log files will be kept.  This location
@@ -62,7 +64,8 @@ backup running (common when there is a long initial backup running),
 the newer backup will be aborted.
 
 Logs of what happens during each backup and other matinenance
-activities are stored in `$DEST/var/log`.
+activities are stored in `$DEST/var/log`.  The latest logs or those
+for a specific date can be retrieved and read with `$DEST/bin/logs`.
 
 
 ## Restoration
