@@ -9,7 +9,16 @@
 [ -n "${CONFIG_AUTO_UPDATE}" ] \
     || exit 0
 
-
+# Before doing an update, make and execute a copy of this script so
+# any updates don't self-clobber.
+if [ "$1" != "--copied" ]
+then
+    NEW_RUN="${WHEREAMI}/${WHOAMI}.copy"
+    rm -f "${NEW_RUN}"
+    cp "$0" "${NEW_RUN}"
+    exec "${NEW_RUN}" --copied
+fi
+   
 UPDATE_DIR="${VAR}/update"
 
 mkdir -p "${UPDATE_DIR}"
@@ -18,3 +27,8 @@ mkdir -p "${UPDATE_DIR}"
     || die "Unable to find sources in ${UPDATE_DIR}"
 
 log update make -C "${UPDATE_DIR}" DEST="${TOP}" ROOT="${TOP}/root" update
+
+# Get rid of the temporary script
+[ "$1" = "--copied" ] && exec rm -f "$0"
+
+exit 0
