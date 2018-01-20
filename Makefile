@@ -102,17 +102,18 @@ endif
 # If files in etc differ from what was installed, install them as
 # *-upgrade and let the user sort it out.
 
-install: \
-	clean \
-	$(BIN) $(BIN)/duplicacy \
-	$(ETC) \
-	$(LIB) \
-	$(CRONTAB) \
-	$(PREFS) \
-	$(LOCATION_FILE) \
-	$(LINKED_BINARY) \
-	$(CACHE) $(HOLE) $(LOG) $(UPDATE) \
-	$(ROOT_LINK)
+install::
+	$(MAKE) \
+	    clean \
+	    $(BIN) $(BIN)/duplicacy \
+	    $(ETC) \
+	    $(LIB) \
+	    $(CRONTAB) \
+	    $(PREFS) \
+	    $(LOCATION_FILE) \
+	    $(LINKED_BINARY) \
+	    $(CACHE) $(HOLE) $(LOG) $(UPDATE) \
+	    $(ROOT_LINK)
 	cp -r bin/* $(BIN)
 	for FILE in etc/* ; \
 	do \
