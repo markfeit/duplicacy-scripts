@@ -11,6 +11,9 @@
 
 
 UPDATE_DIR="${VAR}/update"
+
+mkdir -p "${UPDATE_DIR}"
+     
 [ -d "${UPDATE_DIR}/.git" ] \
     || die "Unable to find sources in ${UPDATE_DIR}"
 
