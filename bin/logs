@@ -1,0 +1,38 @@
+#!/bin/sh -e
+#
+# Show logs for a specified or the most recent day.
+#
+
+. $(dirname $0)/common
+
+case $# in
+    0)
+	DATE=$(ls "${LOG}" | sort | tail -1 | sed -e 's/T.*$//')
+	;;
+    1)
+	DATE="$1"
+	;;
+    *)
+	die "Usage: ${WHOAMI} [ YYYY-MM-DD ]"
+	;;
+esac
+
+# Do a rough approximation of date validation.
+echo "${DATE}" | egrep -qe '^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]$' \
+    || die "Bad date."
+
+
+(
+    echo "Duplicacy logs for ${DATE}:"
+
+    for FILE in $(ls "${LOG}" | egrep -e "^${DATE}" | sort)
+    do
+	printf "\n\n---------- %s\n\n" \
+	       $(echo "${FILE}" \
+		     | sed -e 's/^.*-\([^-]*\)$/\1/' \
+		     | tr a-z A-Z)
+	cat "${LOG}/${FILE}"
+    done
+) | ${PAGER:-less}
+
+exit 0
