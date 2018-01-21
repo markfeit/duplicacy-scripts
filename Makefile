@@ -16,7 +16,7 @@ DEST=/opt/duplicacy
 #ROOT=/tmp
 #DEST=/tmp/duplicacy-scripts
 
-DUPLICACY_BINARY=duplicacy_linux_x64_2.0.10
+DUPLICACY_BINARY=duplicacy
 DIST_CLEAN += $(DUPLICACY_BINARY)
 
 # Where to link the binary for command-line use
