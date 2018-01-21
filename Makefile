@@ -65,7 +65,7 @@ $(LOCATION_FILE): $(ROOT)
 # Duplicacy binary.
 $(BIN)/$(DUPLICACY_BINARY): $(DUPLICACY_BINARY) $(BIN)
 	rm -f $@
-	cp $< $@
+	cp -fp $< $@
 	chmod 555 $@
 
 $(BIN)/duplicacy: $(BIN)/$(DUPLICACY_BINARY) $(BIN)
@@ -102,32 +102,30 @@ endif
 # If files in etc differ from what was installed, install them as
 # *-upgrade and let the user sort it out.
 
-install::
-	$(MAKE) \
-	    clean \
-	    $(BIN) $(BIN)/duplicacy \
-	    $(ETC) \
-	    $(LIB) \
-	    $(CRONTAB) \
-	    $(PREFS) \
-	    $(LOCATION_FILE) \
-	    $(LINKED_BINARY) \
-	    $(CACHE) $(HOLE) $(LOG) $(UPDATE) \
-	    $(ROOT_LINK)
-	cp -r bin/* $(BIN)
+install: clean \
+	$(BIN) $(BIN)/duplicacy \
+	$(ETC) \
+	$(LIB) \
+	$(CRONTAB) \
+	$(PREFS) \
+	$(LOCATION_FILE) \
+	$(LINKED_BINARY) \
+	$(CACHE) $(HOLE) $(LOG) $(UPDATE) \
+	$(ROOT_LINK)
+	cp -rfp bin/* $(BIN)
 	for FILE in etc/* ; \
 	do \
 	    BASE=$$(basename "$${FILE}") ; \
 	    if [ ! -e "$(ETC)/$${BASE}" ] ; \
 	    then \
-	        cp -f "$${FILE}" "$(ETC)" ; \
+	        cp -fp "$${FILE}" "$(ETC)" ; \
 	    else \
 	        [ -e "$(ETC)/$${BASE}" ] \
 	            && diff "$${FILE}" "$(ETC)/$${BASE}" > /dev/null \
 	            && continue ; \
 	        [ -e "$(ETC)/$$BASE" ] \
-	            && cp -f "$${FILE}" "$(ETC)/$${BASE}-upgrade" \
-	            || cp -f "$${FILE}" "$(ETC)" ; \
+	            && cp -fp "$${FILE}" "$(ETC)/$${BASE}-upgrade" \
+	            || cp -fp "$${FILE}" "$(ETC)" ; \
 	    fi ; \
 	done
 	rm -rf "$(PREFS)/logs"
