@@ -67,10 +67,11 @@ $(BIN)/$(DUPLICACY_BINARY): $(DUPLICACY_BINARY) $(BIN)
 	rm -f $@
 	cp -fp $< $@
 	chmod 555 $@
-
-$(BIN)/duplicacy: $(BIN)/$(DUPLICACY_BINARY) $(BIN)
-	rm -f $@
-	ln -s $(DUPLICACY_BINARY) $@
+	if [ "$(DUPLICACY_BINARY)" != "duplicacy" ] ; \
+	then \
+	    rm -f $@ ; \
+	    ln -s $(DUPLICACY_BINARY) $@ ; \
+	fi
 
 ifeq ($(TEST_BUILD),)
 LINKED_BINARY=$(BINARY_LINK)/duplicacy
