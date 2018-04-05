@@ -1,10 +1,7 @@
 # duplicacy-scripts
 
-**NOTE:  These scripts are a work in progress.  Use them at your own risk.**
-
 This is a set of scripts that can be used to manage running
-[Duplicacy](https://duplicacy.com)
-([GitHub](https://github.com/gilbertchen/duplicacy)) on Unix systems.
+[Duplicacy](https://duplicacy.com)([GitHub](https://github.com/gilbertchen/duplicacy)) on Unix systems.
 They were developed and tested under Linux but should work in any
 environment that complies with POSIX.
 
