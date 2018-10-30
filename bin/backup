@@ -17,7 +17,8 @@ list_storage_names | ( \
 	    -stats \
 	    -storage "${NAME}" \
 	    $(limit_rate) \
-	    "$@"
+	    "$@" \
+	    || true
     done
     )
 
