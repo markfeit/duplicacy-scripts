@@ -28,19 +28,6 @@
 . $(dirname $0)/common
 
 
-# Dump a list of the snapshot dates and numbers in a machine-readable
-# format.
-list_snapshots()
-{
-    local OPT=
-    [ -n "$1" ] && OPT="--storage $1"
-    duplicacy_cmd list ${OPT}\
-	| egrep -e '^Snapshot ' \
-	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
-}
-
-
-
 # Gargle the arguments
 
 DEST=""

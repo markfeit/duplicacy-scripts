@@ -167,3 +167,17 @@ list_storage_names()
       egrep -e '"name":\s*"[^"]+"' \
       | sed -e 's/^.*"name":\s*"\([^"]*\)".*$/\1/'
 }
+
+
+
+# Get a list of the snapshot dates and numbers in a machine-readable
+# format.
+
+list_snapshots()
+{
+    local OPT=
+    [ -n "$1" ] && OPT="--storage $1"
+    duplicacy_cmd list ${OPT}\
+	| egrep -e '^Snapshot ' \
+	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
+}
