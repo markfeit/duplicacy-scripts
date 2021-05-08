@@ -47,7 +47,10 @@ Set up Duplicacy by placing a `preferences` and optional `filter` file
 in `$DEST/prefs` Samples are provided in the `prefs` directory of the
 sources.  These files are not installed by default.
 
-Set up the scripts by editing `$DEST/etc/settings`.
+Set up the scripts by editing `$DEST/etc/settings`.  Note that if
+`CONFIG_AUTO_UPDATE` is enabled, any changes in the original GitHub
+repository will be applied to `$DEST/etc/settings-update` rather than
+overwriting `settings`.
 
 At this point, backups and maintenance will be done automatically by
 cron.
@@ -75,7 +78,8 @@ Files can be restored by executing `$DEST/bin/restore`.  Full documentation is
 Daily (03:00):
 
  * Prune old snapshots according to the rules in `etc/prune`.
- * Remove log files older than 30 days.
+ * Remove old log files per `CONFIG_LOG_LIFE` in settings.
+ * Remove old cache files per `CONFIG_CACHE_LIFE` in settings.
  * Pull and update the software (if enabled in `$DEST/etc/settings`).
 
 Weekly (Sunday at 03:15):
