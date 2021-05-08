@@ -29,6 +29,9 @@ mkdir -p "${LOG}"
 HOLE="${VAR}/hole"
 mkdir -p "${HOLE}"
 
+CACHE="${VAR}/cache"
+mkdir -p "${CACHE}"
+
 PATH=${BIN}:${PATH}
 
 

@@ -6,12 +6,37 @@
 . $(dirname $0)/common
 
 # Remove old logs
-find "${LOG}" -depth -mtime +90 -print0 | xargs -0 rm -rf
+if [ -n "${CONFIG_LOG_LIFE}" ]
+then
+    find "${LOG}" -depth -mtime "+${CONFIG_LOG_LIFE}" -print0 \
+	| xargs -0 rm -rf
+fi
+
 
 # Clear out the black hole.  Prune writes empty logs here.
-rm -rf ${HOLE}/*
+find ${HOLE}/ -type f -print0 \
+    | xargs -0 rm -rf
 
-# Prune old snapshots
-do_maint && log prune "${BIN}/prune"
+
+# Prune old snapshots and clean the cache.
+
+if do_maint
+then
+
+    log prune "${BIN}/prune"
+
+elif [ -n "${CONFIG_CACHE_LIFE}" ]
+then
+
+    # Not doing maintenance doesn't prune the cache, so do our own
+    # version.
+
+    OLD_SIZE =$(du -sh "${CACHE}/." | awk '{ print $1 }')
+    find "${CACHE}/." -type f -atime "+${CONFIG_CACHE_LIFE}" -print0 \
+	| xargs -0 rm -f
+    NEW_SIZE =$(du -sh "${CACHE}/." | awk '{ print $1 }')
+    log echo "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
+
+fi
 
 exit 0

@@ -27,3 +27,12 @@
 # data and lower deduplication rates.
 
 # CONFIG_NO_MAINT=yes
+
+
+# If CONFIG_NO_MAINT is not set, remove files from the cache that have
+# not been accesses in more than this number of days.
+CONFIG_CACHE_LIFE=90
+
+
+# Number of days to keep logs
+CONFIG_LOG_LIFE=90
