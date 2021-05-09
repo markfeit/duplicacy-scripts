@@ -31,11 +31,11 @@ then
     # Not doing maintenance doesn't prune the cache, so do our own
     # version.
 
-    OLD_SIZE =$(du -sh "${CACHE}/." | awk '{ print $1 }')
+    OLD_SIZE=$(du -sh "${CACHE}/." | awk '{ print $1 }')
     find "${CACHE}/." -type f -atime "+${CONFIG_CACHE_LIFE}" -print0 \
 	| xargs -0 rm -f
-    NEW_SIZE =$(du -sh "${CACHE}/." | awk '{ print $1 }')
-    log echo "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
+    NEW_SIZE=$(du -sh "${CACHE}/." | awk '{ print $1 }')
+    log prune "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
 
 fi
 
