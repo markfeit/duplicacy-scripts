@@ -35,7 +35,10 @@ then
     find "${CACHE}/." -type f -atime "+${CONFIG_CACHE_LIFE}" -print0 \
 	| xargs -0 rm -f
     NEW_SIZE=$(du -sh "${CACHE}/." | awk '{ print $1 }')
-    log prune echo "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
+    if [ "${NEW_SIZE}" != "${OLD_SIZE}" ]
+    then
+	log prune echo "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
+    fi
 
 fi
 
