@@ -67,10 +67,10 @@ activities are stored in `$DEST/var/log`.  The latest logs or those
 for a specific date can be retrieved and read with `$DEST/bin/logs`.
 
 
-## Restoration
+## Restoring Files
 
-Files can be restored by executing `$DEST/bin/restore`.  Full documentation is
-(for now) in that file.
+To restore files, execute `$DEST/bin/restore`.  Detailed help may be
+obtained with the `--help` switch.
 
 
 ## Maintenance

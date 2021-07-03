@@ -2,29 +2,37 @@
 #
 # Restore files from a backup
 #
+#BEGIN-HELP
+#
 # Usage:
 #
-#   restore OPTIONS PATH [ PATH ... ]
+#   restore [ OPTIONS ] PATH [ PATH ... ]
 #
-# Where PATH is a path to a directory or file.  If a PATH exists in
-# the file system, it will be restored as its type (file or
-# directory).  If it does not exist, append a slash to force it to be
-# treated as a directory.  PATHs beginning with "+", "-", "i:" or "e:"
-# will be passed directly to Duplicacy and used as filters.
+# Where PATH is a path to a directory or file relative to the root of
+# the backup set.  If a PATH exists in the file system, it will be
+# restored as its type (file or directory).  If it does not exist,
+# append a slash to force it to be treated as a directory.  PATHs
+# beginning with "+", "-", "i:" or "e:" will be passed directly to
+# Duplicacy and used as filters.
 #
 # Options:
 #
-#   --dest DIR     Restore to DIR.  DIR must be nonexistant or empty.
-#   --list         List the snapshot times and exit
-#   --storage ID   Use storage identified by ID (default is 'default')
-#   --time TIME    An ISO 8601 timestamp indicating the desired time
-#                  from which the file is to be restored.  The default
-#                  is the current time.  (Example:  2018-06-13T17:50)
+#   --dest DIR     Restore to DIR instead of their original location.
+#                  DIR must be nonexistant or empty.
 #
-# If no --dest is supplied, the files will be restored relative to the
-# root.
+#   --list         List the times of all available snapshots in ISO
+#                  8601 format an exit without restoring anything and
+#                  ignoring all other options except --storage.
 #
-
+#   --storage ID   Restore from the storage named ID.  If not provided,
+#                  files will be restored from "default".
+#
+#   --time TIME    Restore from the most-recent snapshot in the backup
+#                  set that occurred before the ISO 8601 timestame TIME
+#                  (e.g., 2021-07-03T08:30:00).
+#
+#END-HELP
+#
 . $(dirname $0)/common
 
 
@@ -40,6 +48,10 @@ do
     ARG="$1"
     shift
     case "${ARG}" in
+	--help)
+	    sed -n -e '/^#BEGIN-HELP/,${/^#BEGIN-HELP/d; /^#END-HELP/q; s/^#//; s/^ //; p}' "$0"
+	    exit 0
+	    ;;
 	--dest)
 	    DEST=$1
 	    shift
