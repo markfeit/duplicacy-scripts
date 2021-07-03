@@ -181,7 +181,7 @@ echo "Restoring to ${DEST}"
 	    -stats \
 	    -storage "${STORAGE}" \
 	    "$@" \
-) | tee "${DEST}/RESTORE-LOG"
+)
 
 
 # Clean up any leftovers
