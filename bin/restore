@@ -174,15 +174,14 @@ fi
 
 echo "Restoring to ${DEST}"
 
-cd "${DEST}"
-
-duplicacy \
-    restore \
-    -r "${REVISION}" \
-    -stats \
-    -storage "${STORAGE}" \
-    "$@" \
-    | tee "${DEST}/RESTORE-LOG"
+( cd "${DEST}" \
+     && duplicacy \
+	    restore \
+	    -r "${REVISION}" \
+	    -stats \
+	    -storage "${STORAGE}" \
+	    "$@" \
+) | tee "${DEST}/RESTORE-LOG"
 
 
 # Clean up any leftovers
