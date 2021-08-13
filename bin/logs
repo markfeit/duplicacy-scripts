@@ -2,8 +2,22 @@
 #
 # Show logs for a specified or the most recent day.
 #
+# By default, backup logs are stripped of information about patterns,
+# packing, skipping and uploading.  Use the --long switch to see
+# everything.
+#
 
 . $(dirname $0)/common
+
+
+LOG_FILTER=filter_log
+case "$1" in
+    --long)
+	LOG_FILTER=cat
+	shift
+	;;
+esac
+
 
 case $# in
     0)
@@ -22,6 +36,20 @@ echo "${DATE}" | egrep -qe '^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]$' \
     || die "Bad date."
 
 
+# Filter out crufty stuff from backup logs only.
+filter_log()
+{
+    if (echo "$1" | egrep -q -e '-backup$')
+    then
+	echo "(Short form; use --long to see everything.)"
+	echo
+	egrep -v -e '^(Pattern:|Packing|Packed|Skipped|Uploaded) ' "$1"
+    else
+	cat "$1"
+    fi
+}
+
+
 (
     echo "Duplicacy logs for ${DATE}:"
 
@@ -31,7 +59,7 @@ echo "${DATE}" | egrep -qe '^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]$' \
 	       $(echo "${FILE}" \
 		     | sed -e 's/^.*-\([^-]*\)$/\1/' \
 		     | tr a-z A-Z)
-	cat "${LOG}/${FILE}"
+	$LOG_FILTER "${LOG}/${FILE}"
     done
 ) | ${PAGER:-less}
 
