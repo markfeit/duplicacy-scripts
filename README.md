@@ -21,8 +21,9 @@ Clone this repository:  `git clone https://github.com/markfeit/duplicacy-scripts
 Download the Duplicacy binary from [Gilbert Chen's release
 page](https://github.com/gilbertchen/duplicacy/releases) or [build one
 of your own](https://github.com/markfeit/duplicacy-dev) and and place
-the file in the `duplicacy-scripts` directory.  Note that the license for
-Duplicacy imposes some restrictions on its use.  Please abide by them.
+it in the `duplicacy-scripts` directory as a file named `duplicacy`.
+Note that the license for Duplicacy imposes some restrictions on its use.
+Please abide by them.
 
 Select a location where duplicacy-scripts, the Duplicacy
 configuration, its cache and log files will be kept.  This location
