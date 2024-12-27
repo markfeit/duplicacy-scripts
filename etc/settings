@@ -38,4 +38,4 @@ CONFIG_CACHE_LIFE=90
 CONFIG_LOG_LIFE=90
 
 # Un-comment to make backup and prune operations inert
-# DRY_RUN=yes
+# CONFIG_DRY_RUN=yes
