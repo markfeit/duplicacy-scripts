@@ -36,3 +36,6 @@ CONFIG_CACHE_LIFE=90
 
 # Number of days to keep logs
 CONFIG_LOG_LIFE=90
+
+# Un-comment to make backup and prune operations inert
+# DRY_RUN=yes
