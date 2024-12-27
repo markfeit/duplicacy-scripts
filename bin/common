@@ -194,3 +194,33 @@ dry_run_arg()
 	echo '-dry-run'
     fi
 }
+
+# See if the variable named in $1 is enabled
+is_enabled()
+{
+    VALUE=$(eval echo "\$$1")
+    [ -n "${VALUE}" ] || VALUE=no
+
+    case $(echo "${VALUE}" | tr A-Z a-z) in
+	0|false|no)
+	    return 1
+	    ;;
+	1|true|yes)
+	    return 0
+	    ;;
+	*)
+	    die "Don't understand '$1' value of '${VALUE}'"
+	    ;;
+	    
+    esac
+}
+
+
+# Exit if CONFIG_SKIP_CRON_JOBS is set
+exit_if_no_cron()
+{
+    if is_enabled CONFIG_SKIP_CRON_JOBS
+    then
+	exit 0
+    fi
+}

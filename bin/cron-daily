@@ -5,6 +5,8 @@
 
 . $(dirname $0)/common
 
+exit_if_no_cron
+
 # Remove old logs
 if [ -n "${CONFIG_LOG_LIFE}" ]
 then

@@ -39,3 +39,6 @@ CONFIG_LOG_LIFE=90
 
 # Un-comment to make backup and prune operations inert
 # CONFIG_DRY_RUN=yes
+
+# Un-comment to skip cron jobs
+# CONFIG_SKIP_CRON_JOBS=yes

@@ -5,6 +5,8 @@
 
 . $(dirname $0)/common
 
+exit_if_no_cron
+
 do_maint && log exhaustive "${BIN}/prune" -exhaustive
 
 do_maint && log check "${BIN}/check"
