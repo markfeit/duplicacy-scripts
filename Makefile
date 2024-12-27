@@ -16,9 +16,6 @@ DEST=/opt/duplicacy
 #ROOT=/tmp
 #DEST=/tmp/duplicacy-scripts
 
-DUPLICACY_BINARY=duplicacy
-DIST_CLEAN += $(DUPLICACY_BINARY)
-
 # Where to link the binary for command-line use
 BINARY_LINK=/usr/local/bin
 
@@ -38,6 +35,8 @@ HOLE=$(VAR)/hole
 LOG=$(VAR)/log
 UPDATE=$(VAR)/update
 
+DUPLICACY_BINARY=$(BIN)/duplicacy
+DIST_CLEAN += $(DUPLICACY_BINARY)
 
 default:
 	@echo Nothing to do.
@@ -63,22 +62,9 @@ $(LOCATION_FILE): $(ROOT)
 
 
 # Duplicacy binary.
-$(BIN)/$(DUPLICACY_BINARY): $(DUPLICACY_BINARY) $(BIN)
-	rm -f $@
-	cp -fp $< $@
-	chmod 555 $@
-	if [ "$(DUPLICACY_BINARY)" != "duplicacy" ] ; \
-	then \
-	    rm -f $@ ; \
-	    ln -s $(DUPLICACY_BINARY) $@ ; \
-	fi
 
-ifeq ($(TEST_BUILD),)
-LINKED_BINARY=$(BINARY_LINK)/duplicacy
-$(LINKED_BINARY): $(BIN)/$(DUPLICACY_BINARY)
-	if [ -w "$(BINARY_LINK)" ]; then rm -f $@ ; fi
-	if [ -w "$(BINARY_LINK)" ]; then ln -s $< $@ ; fi
-endif
+$(DUPLICACY_BINARY): $(BIN)
+	./bin/download-duplicacy "$@"
 
 # Crontab
 CRONTAB=$(LIB)/crontab

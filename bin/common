@@ -184,3 +184,13 @@ list_snapshots()
 	| egrep -e '^Snapshot ' \
 	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
 }
+
+
+# Return a dry-run argument if we're configured for that.
+dry_run_arg()
+{
+    if [ -n "${CONFIG_DRY_RUN}" ]
+    then
+	echo '-dry-run'
+    fi
+}

@@ -27,7 +27,7 @@ list_storage_names | ( \
     while read NAME
     do
 	printf "\n#\n# Pruning ${NAME}\n#\n\n"
-	duplicacy_cmd -v prune -storage "${NAME}" ${PRUNESPEC} "$@"
+	duplicacy_cmd -v prune $(dry_run_arg) -storage "${NAME}" ${PRUNESPEC} "$@"
     done
     )
 

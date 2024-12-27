@@ -1,0 +1,96 @@
+#!/bin/sh -e
+#
+# Download the latest version of Duplicacy from GitHub and store it in
+# a specified location.  If the latest available is the same version as
+# the installed file, do nothing.
+#
+# Usage:  download-duplicacy [ DEST ]
+#
+# Where DEST is where the downloaded file should reside.  The default
+#   is ./duplicacy.
+#
+
+NAME=duplicacy
+GITHUB_REPO="gilbertchen/${NAME}"
+
+die()
+{
+    echo "$@" 1>&2
+    exit 1
+}
+
+TMPBASE=$(mktemp -d)
+cleanup()
+{
+    rm -rf "${TMPBASE}"
+}
+trap cleanup EXIT
+
+
+[ $# -le 1 ] \
+    || die "Usage: $(basename $0) [ DEST ]"
+
+[ -z "$1" ] \
+    && DEST="./duplicacy" \
+    || DEST="$1"
+
+
+RELEASE_INFO="${TMPBASE}/release-info"
+curl -s -o "${RELEASE_INFO}" https://api.github.com/repos/${GITHUB_REPO}/releases/latest
+
+[ "$(jq -r '.status' "${RELEASE_INFO}")" == 'null' ] \
+    || die "Failed to download release info: $(jq -r '.message' "${RELEASE_INFO}")"
+
+TAG_NAME="$(jq -r '.tag_name' "${RELEASE_INFO}")"
+VERSION=$(echo "${TAG_NAME}" | sed -e 's/^v//')
+
+if [ -f "${DEST}" -a -x "${DEST}" ]
+then
+    INSTALLED_VERSION=$("${DEST}" | sed -e '1,/^VERSION:/d; s/^\s*\([0-9.]\+\)\s.*$/\1/' | head -1)
+    if [ "${INSTALLED_VERSION}" = "${VERSION}" ]
+    then
+	echo "${DEST} is already the latest version (${VERSION})"
+	exit 0
+    fi
+fi
+
+# These adapt the output of uname(1) to the conventions Gilbert uses
+# for download names.
+
+UNAME_S=$(uname -s)
+case "${UNAME_S}" in
+    Darwin)
+	SYSTEM=osx
+	;;
+    FreeBSD)
+	SYSTEM=freebsd
+	;;
+    Linux)
+	SYSTEM=linux
+	;;
+    *)
+	die "${UNAME_S} is not supported"
+	;;
+esac
+
+UNAME_M=$(uname -m)
+case "${UNAME_M}" in
+    arm|i386)
+	ARCH="${UNAME_M}"
+	;;
+    aarch64)
+	ARCH=arm64
+	;;
+    x86_64)
+	ARCH=x64
+	;;
+    *)
+	die "${UNAME_M} is not supported"
+	;;
+esac
+
+DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/${TAG_NAME}/${NAME}_${SYSTEM}_${ARCH}_${VERSION}"
+
+echo "Downloading ${NAME} ${VERSION} for ${SYSTEM} on ${ARCH}"
+curl -s -L -o "${DEST}" "${DOWNLOAD_URL}"
+chmod +x "${DEST}"
