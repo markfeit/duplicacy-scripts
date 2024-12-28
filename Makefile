@@ -128,6 +128,8 @@ endif
 TO_UNINSTALL += $(BIN) $(LIB) $(LOCATION_FILE)
 
 
+# The remake of $(DUPLICACY_BINARY) is done separately rather than as
+# a dependency so it happens post-fetch.
 update:
 	git fetch
 	if [ $$(git diff $(GIT_BRANCH) | wc -l) -gt 0 ]; \
@@ -135,6 +137,7 @@ update:
 	    git merge $(GIT_BRANCH) \
 	    && $(MAKE) NO_GIT=1 install ; \
 	fi
+	$(MAKE) $(DUPLICACY_BINARY)
 
 
 uninstall:
