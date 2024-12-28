@@ -1,19 +1,27 @@
 # duplicacy-scripts
 
 This is a set of scripts that can be used to manage running
-[Duplicacy](https://duplicacy.com)([GitHub](https://github.com/gilbertchen/duplicacy)) on Unix systems.
-They were developed and tested under Linux but should work in any
-environment that complies with POSIX.
+[Duplicacy](https://duplicacy.com)([GitHub](https://github.com/gilbertchen/duplicacy))
+on Unix systems.  They were developed and tested under Linux but
+should work in any environment that complies with POSIX except Windows
+(see note below).
 
-**NOTE:** Limitations in the current implementation of Duplicacy and
-the fact that Windows does not handle symbolic linking in a POSIX-like
-way makes these scripts unsuitable for that environment.
+## Notes
 
-**NOTE:** These scripts download and use the Duplicacy binary from
-[Gilbert Chen's release
+**Release 1.3:** The `duplicacy` binary that was manually installed in
+  the top-level directory per the instructions from earlier versions
+  is no longer used and may be removed.
+
+These scripts download and use the Duplicacy binary from [Gilbert
+Chen's release
 page](https://github.com/gilbertchen/duplicacy/releases) on GitHub.
 The license for Duplicacy imposes some restrictions on its use.
 Please abide by them.
+
+Limitations in the current implementation of Duplicacy and the fact
+that Windows does not handle symbolic linking in a POSIX-like way
+makes these scripts unsuitable for that environment.
+
 
 
 ## Prerequisites
