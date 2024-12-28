@@ -63,7 +63,7 @@ $(LOCATION_FILE): $(ROOT)
 
 # Duplicacy binary.
 
-$(DUPLICACY_BINARY): $(BIN)
+$(DUPLICACY_BINARY): FORCE
 	./bin/download-duplicacy "$@"
 
 # Crontab
@@ -90,7 +90,7 @@ endif
 # *-upgrade and let the user sort it out.
 
 install: clean \
-	$(BIN) $(BIN)/duplicacy \
+	$(BIN) $(DUPLICACY_BINARY) \
 	$(ETC) \
 	$(LIB) \
 	$(CRONTAB) \
@@ -170,3 +170,6 @@ clean:
 
 distclean: clean
 	rm -rf $(DIST_CLEAN)
+
+
+FORCE:
