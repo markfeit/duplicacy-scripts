@@ -173,14 +173,19 @@ list_storage_names()
 
 
 
-# Get a list of the snapshot dates and numbers in a machine-readable
+# Get a list of the revision dates and numbers in a machine-readable
 # format.
 
-list_snapshots()
+# Args:
+#  1 - Snapshot
+#  2 - Storage (Optional)
+
+list_revisions()
 {
+    local SNAPSHOT="$1"
     local OPT=
-    [ -n "$1" ] && OPT="--storage $1"
-    duplicacy_cmd list ${OPT}\
+    [ -n "$2" ] && OPT="--storage $2"
+    duplicacy_cmd list --id "${SNAPSHOT}" ${OPT}\
 	| egrep -e '^Snapshot ' \
 	| awk '{ printf "%sT%s %s\n", $7, $8, $4 }'
 }
