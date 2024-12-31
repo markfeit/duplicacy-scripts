@@ -172,6 +172,18 @@ list_storage_names()
 }
 
 
+# TODO: Get a list of the snapshots in a given storage.
+# Args:
+#  1 - Storage name
+list_snapshot_names()
+{
+    duplicacy_cmd list -storage "$1" -a \
+	| grep -E '^Snapshot ' \
+	| cut -d ' ' -f 2 \
+	| sort \
+	| uniq
+}
+
 
 # Get a list of the revision dates and numbers in a machine-readable
 # format.
