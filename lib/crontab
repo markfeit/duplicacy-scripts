@@ -2,19 +2,6 @@
 # Crontab addition for Duplicacy Scripts
 #
 
-# Minute, Hour, DoM, Month, DoW
-
-
-# Software update.  Do this well before anything else.
+# Backups and Maintenance
 #Min Hour DoM Mon DoW  Command
-0    0    *   *   *    __BIN__/update
-
-# Backups
-#Min Hour DoM Mon DoW  Command
-45   0    *   *   *    __BIN__/cron-backup
-
-# Routine Maintenance
-#Min Hour DoM Mon DoW  Command
-0    3    *   *   *    __BIN__/cron-daily
-15   3    *   *   Sun  __BIN__/cron-weekly
-30   3    1-7 *   Sun  __BIN__/cron-monthly
+45   0    *   *   *    __BIN__/all-actions

@@ -1,0 +1,127 @@
+#!/bin/sh -e
+#
+# Duplicacy Backups and Maintenance
+#
+
+. $(dirname $0)/common
+
+exit_if_no_cron
+
+#
+# Backup.  Do this always.
+#
+
+log backup "${BIN}/backup"
+
+
+
+#
+# Utilities for keeping track of the last time something was done
+#
+
+LAST="${VAR}/last"
+
+# Set the last time a "thing" named in $1 was completed
+last_set()
+{
+    local FILE="${LAST}/$1"
+    local BUILD="${FILE}-build"
+
+    mkdir -p "${LAST}"
+    rm -rf "${BUILD}"
+    epoch_time > "${BUILD}"
+    mv -f "${BUILD}" "${FILE}"
+}
+
+# Figure out how many days it's been since set_last was called for a
+# named thing.  If not present, assume since the epoch.  Add 25%
+# rounding to cover timing variances.
+last_age()
+{
+    local NOW=$(epoch_time)
+    local FILE="${LAST}/$1"
+    [ -e "${FILE}" ] \
+	&& THEN=$(cat "${FILE}") \
+	    || THEN=0
+    echo "$(( (${NOW} - ${THEN} + 21600) / 86400 ))"
+}
+
+
+#
+# Maintenance
+#
+
+# Log Cleanout
+
+if [ -n "${CONFIG_LOG_LIFE}" ]
+then
+    find "${LOG}" -depth -mtime "+${CONFIG_LOG_LIFE}" -print0 \
+	| xargs -0 rm -rf
+fi
+
+
+# Black Hole Clean-Out  (Prue writes empty logs here.)
+
+find ${HOLE}/ -type f -print0 \
+    | xargs -0 rm -rf
+
+
+# Snapshot/Revision Pruning
+
+if [ $(last_age prune) -ge 1 ]
+then
+    if do_maint
+    then
+	
+	log prune "${BIN}/prune"
+	last_set prune
+	
+    elif [ -n "${CONFIG_CACHE_LIFE}" ]
+    then
+
+	# Not doing maintenance doesn't prune the local cache, so do our
+	# own version.
+
+	OLD_SIZE=$(du -sh "${CACHE}/." | awk '{ print $1 }')
+	find "${CACHE}/." -type f -atime "+${CONFIG_CACHE_LIFE}" -print0 \
+	    | xargs -0 rm -f
+	NEW_SIZE=$(du -sh "${CACHE}/." | awk '{ print $1 }')
+	if [ "${NEW_SIZE}" != "${OLD_SIZE}" ]
+	then
+	    log prune echo "Trimmed cache from ${OLD_SIZE} to ${NEW_SIZE}"
+	fi
+
+    fi
+fi
+
+
+# Exhaustive Prune
+
+if do_maint && [ $(last_age prune-exhaustive) -ge 7 ]
+then
+    log exhaustive "${BIN}/prune" -exhaustive
+    last_set prune-exhaustive
+fi
+
+
+# Integrity Check
+
+if do_maint && [ $(last_age check) -ge 7 ]
+then
+    log check "${BIN}/check"
+    last_set check
+fi
+
+
+# Software Update, done last so there's at least a recent backup.
+
+if do_maint && [ $(last_age update) -ge 1 ]
+then
+    "${BIN}/update"
+    last_set update
+fi
+
+
+# The End
+
+exit 0
