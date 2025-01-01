@@ -193,6 +193,10 @@ fi
 
 echo "Restoring to ${DEST}"
 
+# TODO: Restore has no -id switch to pick out a snapshot.  The only
+# way to restore files from another is to put a fake storage entry
+# into the preferences file.
+
 ( cd "${DEST}" \
      && duplicacy \
 	    restore \
