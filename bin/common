@@ -21,8 +21,6 @@ ETC="${TOP}/etc"
 LIB="${TOP}/lib"
 VAR="${TOP}/var"
 
-
-
 LOG="${VAR}/log"
 mkdir -p "${LOG}"
 
@@ -43,6 +41,13 @@ die()
 {
     echo "$@" 1>&2
     exit 1
+}
+
+
+# Return the current time
+epoch_time()
+{
+    awk 'BEGIN{srand();print srand()}'
 }
 
 
