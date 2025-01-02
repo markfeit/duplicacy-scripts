@@ -26,7 +26,17 @@ mkdir -p "${UPDATE_DIR}"
 [ -d "${UPDATE_DIR}/.git" ] \
     || die "Unable to find sources in ${UPDATE_DIR}"
 
-log update make -C "${UPDATE_DIR}" DEST="${TOP}" ROOT="${TOP}/root" update
+if [ -n "${CONFIG_AUTO_UPDATE_BRANCH}" ]
+then
+    GIT_BRANCH="GIT_BRANCH=origin/${CONFIG_AUTO_UPDATE_BRANCH}"
+fi
+
+log update make \
+    -C "${UPDATE_DIR}" \
+    DEST="${TOP}" \
+    ROOT="${TOP}/root" \
+    "${GIT_BRANCH}" \
+    update
 
 # Get rid of the temporary script
 [ "$1" = "--copied" ] && exec rm -f "$0"

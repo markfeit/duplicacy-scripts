@@ -10,6 +10,10 @@
 # the sources from GitHub and doing a 'make update'.
 # CONFIG_AUTO_UPDATE=yes
 
+# If automatically updating, use a branch.  Not usually necessary
+# except for testing.
+# CONFIG_AUTO_UPDATE_BRANCH=master
+
 
 # If defined, limit bandwidth use to this value in megabits per
 # second.  (This contrasts with Duplicacy's parameter, which is
