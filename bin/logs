@@ -43,7 +43,7 @@ filter_log()
     then
 	echo "(Short form; use --long to see everything.)"
 	echo
-	egrep -v -e '^(Pattern:|Packing|Packed|Skipped|Uploaded) ' "$1"
+	egrep -v -e '^(Pattern:|Packing|Packed|Skipped|The chunk |Uploaded) ' "$1"
     else
 	cat "$1"
     fi
