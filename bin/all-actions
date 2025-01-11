@@ -117,7 +117,7 @@ fi
 
 if do_maint && [ $(last_age update) -ge 1 ]
 then
-    "${BIN}/update"
+    log update "${BIN}/update"
     last_set update
 fi
 
