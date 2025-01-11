@@ -15,28 +15,28 @@ LAST="${VAR}/last"
 
 # Set the last time a "thing" named in $1 was completed
 last_set()
-{
-    local FILE="${LAST}/$1"
-    local BUILD="${FILE}-build"
+(
+    FILE="${LAST}/$1"
+    BUILD="${FILE}-build"
 
     mkdir -p "${LAST}"
     rm -rf "${BUILD}"
     epoch_time > "${BUILD}"
     mv -f "${BUILD}" "${FILE}"
-}
+)
 
 # Figure out how many days it's been since set_last was called for a
 # named thing.  If not present, assume since the epoch.  Add 25%
 # rounding to cover timing variances.
 last_age()
-{
-    local NOW=$(epoch_time)
-    local FILE="${LAST}/$1"
+(
+    NOW=$(epoch_time)
+    FILE="${LAST}/$1"
     [ -e "${FILE}" ] \
 	&& THEN=$(cat "${FILE}") \
 	    || THEN=0
     echo "$(( (${NOW} - ${THEN} + 21600) / 86400 ))"
-}
+)
 
 
 #
