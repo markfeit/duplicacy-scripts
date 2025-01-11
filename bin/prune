@@ -34,6 +34,9 @@ list_storage_names | (
 	    echo "(Dry Run)"
 	fi
 
+	# TODO: Can we just do -all instead of looping through the
+	# IDs?
+
 	list_snapshot_names "${STORAGE}" | (
 	    while read SNAPSHOT
 	    do
