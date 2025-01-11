@@ -30,6 +30,7 @@ Your system must have the following installed:
 
  * A POSIX-compliant environment
  * cURL
+ * Git
  * GNU Make
  * jq
 
