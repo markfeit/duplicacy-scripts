@@ -8,14 +8,6 @@
 exit_if_no_cron
 
 #
-# Backup.  Do this always.
-#
-
-log backup "${BIN}/backup"
-
-
-
-#
 # Utilities for keeping track of the last time something was done
 #
 
@@ -46,6 +38,14 @@ last_age()
     echo "$(( (${NOW} - ${THEN} + 21600) / 86400 ))"
 }
 
+
+#
+# Backup.  Do this always.
+#
+
+log backup "${BIN}/backup"
+# This isn't used anywhere
+last_set backup
 
 #
 # Maintenance
