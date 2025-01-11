@@ -23,16 +23,22 @@ PRUNESPEC=$( \
 	| sed -e 's/^/-keep /g' \
 	 )
 
+DRY_RUN_ARG=$(dry_run_arg)
+
 list_storage_names | (
     while read STORAGE
     do
 	printf "\n#\n# Pruning storage ${STORAGE}\n#\n\n"
+	if [ "${DRY_RUN_ARG}" ]
+	then
+	    echo "(Dry Run)"
+	fi
 
 	list_snapshot_names "${STORAGE}" | (
 	    while read SNAPSHOT
 	    do
 		printf "\n# Pruning ${STORAGE} snapshot ${SNAPSHOT}\n\n"
-		duplicacy_cmd -v prune $(dry_run_arg) \
+		duplicacy_cmd -v prune ${DRY_RUN_ARG} \
 		     -storage "${STORAGE}" \
 		     -id "${SNAPSHOT}" \
 		     ${PRUNESPEC} \

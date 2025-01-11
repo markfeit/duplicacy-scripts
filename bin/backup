@@ -7,14 +7,20 @@
 
 avoid_running_backup
 
+DRY_RUN_ARG=$(dry_run_arg)
+
 list_storage_names | ( \
     while read NAME
     do
 	printf "\n#\n# Backing up to ${NAME}\n#\n\n"
+	if [ "${DRY_RUN_ARG}" ]
+	then
+	    echo "(Dry Run)"
+	fi
 	duplicacy_cmd \
 	    -v \
 	    backup \
-	    $(dry_run_arg) \
+	    ${DRY_RUN_ARG} \
 	    -stats \
 	    -storage "${NAME}" \
 	    $(limit_rate) \
